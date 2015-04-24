@@ -18,6 +18,7 @@ nytprof.out
 *.o
 *.bs
 /_eumm/
-secure
+**/S3*
+t/s3*
 **/*.pid
 log/*.log
