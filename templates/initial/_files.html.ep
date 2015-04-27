@@ -1,0 +1,11 @@
+%= include 'initial/_files_header' ;
+% for my $key ( @{$keys} ){
+  % my @parts = split /\//, $key->{key} ;
+  % next if !$parts[1] ;
+  <tr>
+    <td><%= $parts[1] %></td>
+    <td><%= $key->{size} %></td>
+    <td><%= $key->{last_modified} %></td>
+  </tr>
+% }
+%= include 'initial/_files_footer' ;

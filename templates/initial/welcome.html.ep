@@ -1,21 +1,28 @@
 % layout 'default';
-<form class="form-inline">
+<form class="form-inline" action="/">
   <div class="form-group">
-    <label class="sr-only" for="exampleInputEmail3">Session ID</label>
-    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Session ID">
+    <label class="sr-only" for="LinkID">Link ID</label>
+    % if( $prefix ) {
+     <input name="prefix" class="form-control" id="LinkID" value="<%= $prefix %>">
+    % } else {
+     <input name="prefix" class="form-control" id="LinkID" placeholder="Link ID">
+    % }
   </div>
   <div class="form-group">
-    <label class="sr-only" for="exampleInputPassword3">Password (optional)</label>
-    <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password (optional)">
+    <label class="sr-only" for="Password">Password (optional)</label>
+    <input name="password" class="form-control" id="Password" placeholder="Password (optional)">
   </div>
   <button type="submit" class="btn btn-primary">Go</button>
 </form>
-<div class="bs-callout bs-callout-danger">
- <h4>Warning!</h4>
- <p>
-Application is under construction!
- </p>
- <p> 
-  <a href="/bootstrap.html">Bootstrap test link</a>
- </p> 
+% my $keys = S3Manager::get_keys($prefix);
+%#= tag 'pre' => dumper($keys) ;
+% if( scalar @{$keys} ){
+ %= include 'initial/_files', response => $keys ;
+% } else {
+<p>
+<div class="alert alert-info" role="alert">
+  <strong>Note!</strong> For demonstration use <%= link_to DEMO_LINK_ID => "/DEMO_LINK_ID" %>.
 </div>
+</p>
+% }
+
