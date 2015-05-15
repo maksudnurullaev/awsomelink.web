@@ -1,0 +1,6 @@
+<p>
+<div class="alert alert-info" role="alert">
+  <strong>No files!</strong> To demo use <%= link_to DEMO_LINK_ID => "/DEMO_LINK_ID" %>.
+</div>
+</p>
+

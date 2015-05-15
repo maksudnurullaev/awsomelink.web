@@ -12,6 +12,10 @@ use 5.012000;
 use strict;
 use warnings;
 use utf8;
+use File::stat;
+use File::Basename;
+use POSIX 'strftime';
+
 use Cwd;
 use Time::Piece;
 use Data::UUID;
@@ -20,8 +24,6 @@ use File::Path qw(make_path);
 use Locale::Currency::Format;
 use Data::Dumper;
 
-sub user_role2company{ shift->session->{'company access'}; };
-
 sub trim{
     my $string = $_[0];
     if(defined($string) && $string){
@@ -29,26 +31,6 @@ sub trim{
         return($string);
     }
     return(undef);
-};
-
-sub get_uuid{
-    my $ug = new Data::UUID;
-    my $uuid = $ug->create;
-    my @result = split('-',$ug->to_string($uuid));
-    return($result[0]);
-};
-
-sub get_date_uuid{
-    my $result= Time::Piece->new->strftime('%Y.%m.%d %T ');
-    return($result . get_uuid());
-};
-
-sub if_defined{
-    my ($self,$key) = @_;
-    return(undef) if !defined($self->stash($key));
-    return(scalar(@{$self->stash($key)})) if ref($self->stash($key)) eq "ARRAY";
-    return(scalar(keys(%{$self->stash($key)}))) if ref($self->stash($key)) eq "HASH"; 
-    return($self->stash($key));
 };
 
 sub is_mobile_browser {
@@ -64,32 +46,6 @@ sub is_mobile_browser {
         return 0;
 };
 
-sub get_date{
-    my $self = shift;
-    my $format = shift || '%Y.%m.%d';
-    return Time::Piece->new->strftime($format);
-};
-
-sub validate_date{
-    my $date = shift;
-    return(undef) if !$date || $date !~ /^\d{4}\.\d{2}\.\d{2}$/;
-    my $format = shift || '%Y.%m.%d';
-    my $result;
-    eval{ $result = Time::Piece->strptime($date,$format); };
-    return(undef) if $@;
-    return($result->strftime($format));
-};
-
-sub currency_format1{
-    my $self   = shift;
-    my $amount = shift;
-    my $ccode  = shift || 'UZB';
-    if( $ccode eq 'UZB' ){
-        Locale::Currency::Format::currency_set('USD','#.###,## ', FMT_COMMON);
-    }
-    return Locale::Currency::Format::currency_format('USD',$amount, FMT_COMMON);
-}
-
 sub validate_passwords{
     my ($password1, $password2, $old_password) = @_;
     return(0) if ( length($password1) < 4 )
@@ -104,25 +60,6 @@ sub validate_email{
     return;
 };
 
-sub validate_session_company{
-    my $self = shift;
-    return(0) if !$self;
-    return $self->session('company id') ;
-};
-
-sub redirect2list_or_path{
-    my ($self,$object_names) = @_ ;
-    if( !$self || !$object_names){
-        warn 'Parameter(s) error!' ;
-        return;
-    }
-    if ( $self->param('path') ){
-        $self->redirect_to($self->param('path'));
-        return;
-    }
-    $self->redirect_to("/$object_names/list");
-};
-
 sub shrink_if{
     my $self = shift;
     my $string = shift;
@@ -132,70 +69,53 @@ sub shrink_if{
     return($string);
 };
 
-sub merge2arr_ref{
-    my ($arr_ref, $value) = (shift,undef);
-    while($value = shift){ push @{$arr_ref}, $value; }
-    return($arr_ref);
-};
-
-sub get_full_url{
-    my $self = shift ;
-    my $url_path = $self->req->url->path->to_string() ;
-    my $url_query = $self->req->url->query->to_string() ;
-    return ($url_query ? "$url_path?$url_query" : $url_path ) ;
-};
-
-sub calc_start4ol{
-    my $self = shift ;
-    my $p = $self->stash('paginator');
-    return(1) if !$p ;
-    return(($p->[0] - 1) * $p->[2] + 1);
-};
-
-sub utf_compare{
-    my($self,$a,$b) = @_ ;
-    if( !$self || !$a || !$b ){
-        warn "Parameters not defined properly to compare!";
-        return(0);
-    }
-    my @a = unpack('U*',$a);
-    my @b = unpack('U*',$b);
-    my ($a_length, $b_length) = (scalar(@a),scalar(@b));
-    my $min_length = ($a_length <= $b_length ? $a_length : $b_length) ;
-    return($a_length <=> $b_length) if !$min_length ;
-    for(my $i = 0; $i < $min_length; $i++){
-        return($a[$i] <=> $b[$i]) if $a[$i] != $b[$i];
-    }
-    return($a_length <=> $b_length);
-};
-
-sub url_append{
-    my ($path,$value) = @_ ;
-    return(undef) if !$path ;
-    return($path) if !$value ;
-    return("$path&$value") if $path =~ /\?/ ;
-    return("$path?$value") ;
-};
-
-sub get_client_companies{
-    my $self = shift;
-    my $user_id = $self->session('user id');
-    return if !$user_id ;
-
-    my $db = Db->new($self);
-    my $companies = $db->get_links( $user_id, 'company', ['name'] );
+sub get_files{
+    my ($c,$prefix) = @_ ;
+    return(undef) if !$c || !$prefix ;
+    my $path = $c->app->home->rel_dir("FILES/$prefix/FILES");
+    return(undef) if ! -d $path ;
+    my @files = <"$path/*">;
     my $result = {};
-
-    for my $cid (keys %{$companies}){
-       my $company = $db->get_objects({id => [$cid], field => ['name']})->{$cid};
-       $result->{$cid} = {
-           name   => $company->{name},
-           access => $db->get_linked_value('access',$cid,$user_id)
-       };
+    for my $file (@files ){
+        my($filename, $dirs, $suffix) = fileparse($file);
+        my $st = stat($file);
+        $result->{$filename} = { size => $st->[7], mdate => strftime('%Y-%m-%d %H:%M:%S', localtime( $st->[9])) } ;
     }
-    return($result);
+    return( $result );
 };
 
+sub sync_meta{
+    my $path = shift;
+    my $meta_file = "$path/META.TXT";
+    my $files_dir = "$path/FILES";
+    if( !$path || (! -d $path) || (! -e $meta_file) || (! -d $files_dir) ){
+        warn "Some path are not defined or not exist!";
+        return;
+    }
+    # 1. Make hash from existance meta file
+    if( open my $info, $meta_file ){
+        my @lines = <$info>;
+        close($info);
+        my $content ;
+        for (@lines){
+            s/\R\z// ;
+            $content .= $_ if $_ ;
+        }
+        if( opendir(my $dir, $files_dir) ){
+            while( readdir $dir ){
+                if( $_ ne '.' && $_ ne '..' ){
+                    if( index($content,$_) == -1 ){
+                        unlink "$files_dir/$_";
+                    }
+                }
+            }
+        } else {
+            warn "Could not open $files_dir!";
+        }
+    } else {
+        warn "Could not open $meta_file!";
+    }
+};
 
 # END OF PACKAGE
 };

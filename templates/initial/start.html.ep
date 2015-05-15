@@ -1,0 +1,5 @@
+% layout 'default';
+%= include 'initial/_header_form';
+%= include 'error' if stash('error') ;
+%= include 'initial/_body';
+

@@ -1,10 +1,12 @@
+% use Number::Bytes::Human qw(format_bytes);
 %= include 'initial/_files_header' ;
 % for my $key ( @{$keys} ){
   % my @parts = split /\//, $key->{key} ;
   % next if !$parts[1] ;
   <tr>
-    <td><%= $parts[1] %></td>
-    <td><%= $key->{size} %></td>
+    % my $filename = $parts[1];
+    <td><%= link_to $filename => "/$prefix/upload/download/$filename" %></td>
+    <td><%= format_bytes($key->{size}) %></td>
     <td><%= $key->{last_modified} %></td>
   </tr>
 % }

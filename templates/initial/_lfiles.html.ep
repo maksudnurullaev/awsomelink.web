@@ -1,0 +1,10 @@
+% use Number::Bytes::Human qw(format_bytes);
+%= include 'initial/_files_header' ;
+% for my $key ( keys %{$files} ){
+  <tr>
+    <td><%= link_to $key => "/$prefix/upload/download/$key" %></td>
+    <td><%= format_bytes($files->{$key}{size}) %></td>
+    <td><%= $files->{$key}{mdate} %></td>
+  </tr>
+% }
+%= include 'initial/_files_footer' ;

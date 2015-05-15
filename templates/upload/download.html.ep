@@ -1,0 +1,2 @@
+% layout 'default';
+%= include 'initial/_nodata' ;

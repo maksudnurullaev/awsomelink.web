@@ -1,20 +1,20 @@
 package AWSomeLink::Initial; {
 use Mojo::Base 'Mojolicious::Controller';
 use S3Manager ;
+use Utils;
 
-# This action will render a template
-sub welcome {
+sub start {
     my $self = shift;
-    warn $self->req->method;
-    my $prefix = $self->stash->{prefix};
-    if( $prefix ){
+    my $prefix = Utils::trim $self->stash->{prefix};
+    if( $prefix && length($prefix) >= 8 ){
         my $keys = S3Manager::get_keys($prefix);
         $self->stash( keys => $keys );
     } else {
-        $prefix = $self->param('prefix');
-        warn "Post form $prefix";
-        if( $prefix ){
+        $prefix = Utils::trim $self->param('prefix');
+        if( $prefix && length($prefix) >= 8 ){
             $self->redirect_to("/$prefix");
+        } else {
+            $self->stash(error => "Invalid LinkID!") if $prefix;
         }
     }
 }
