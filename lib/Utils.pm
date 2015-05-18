@@ -117,6 +117,13 @@ sub sync_meta{
     }
 };
 
+sub get_uuid{
+    my $ug = new Data::UUID;
+    my $uuid = $ug->create;
+    my @result = split('-',$ug->to_string($uuid));
+    return(lc($result[0]));
+};
+
 # END OF PACKAGE
 };
 

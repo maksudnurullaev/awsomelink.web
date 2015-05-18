@@ -1,0 +1,6 @@
+<p>
+ <ul class="nav nav-pills">
+  <li role="presentation" class="active"><a href="<%= $_link %>">Back</a></li>
+ </ul>
+</p>
+

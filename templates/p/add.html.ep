@@ -1,0 +1,3 @@
+% layout 'default';
+%= include 'p/_back_btn', _link => '/my/p' ;
+%= include 'p/_p_add_form' ;

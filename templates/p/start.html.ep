@@ -1,0 +1,22 @@
+% layout 'default';
+<p>
+ <ul class="nav nav-pills">
+  <li role="presentation" class="active"><a href="/my/p/add">Create new project</a></li>
+ </ul>
+</p>
+<p>
+OR
+</p>
+<p>
+ <form class="form-inline" action="/">
+  <div class="form-group">
+    <label class="sr-only" for="LinkID">Link ID</label>
+    % if( $prefix ne 'my' ) {
+     <input name="prefix" class="form-control" id="LinkID" value="<%= $prefix %>">
+    % } else {
+     <input name="prefix" class="form-control" id="LinkID" placeholder="Project ID">
+    % }
+  </div>
+  <button type="submit" class="btn btn-primary">Go</button>
+ </form>
+</p>

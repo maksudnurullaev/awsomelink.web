@@ -1,0 +1,19 @@
+<h1>New project ID: <span class="label label-default"><%= $new_project_id %></span></h1>
+
+%= form_for '/my/p/add' => ( method => 'post' ) => begin
+  %= hidden_field new_project_id => $new_project_id ;
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" id="title" placeholder="Enter project title">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="description">Description (optional)</label>
+    <textarea id="description" class="form-control" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-default">Create</button>
+% end
+
