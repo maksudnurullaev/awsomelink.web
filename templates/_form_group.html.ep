@@ -1,0 +1,13 @@
+% my $f_name_ = lc( $f_name =~ s/\s/_/r );
+% my $f_access = stash('f_access') || 'rw' ;
+% my $f_value = stash('f_value') || param($f_name_);
+% my $_class = stash($f_name_ . '_validation') || '';
+%= tag div => ( class => "form-group $_class" ) => begin 
+ %= tag label => ( for => $f_name_ ) => $f_name ;
+ % if( $f_access eq 'rw' ){
+  %= tag input => ( name => $f_name_, type => $f_type, class => 'form-control', id => $f_name_, placeholder => ('Enter ' . $f_name), value => $f_value );   
+ % } else {
+  %= tag input => ( name => $f_name_, type => $f_type, class => 'form-control', id => $f_name_, placeholder => ('Enter ' . $f_name), value => $f_value, disabled => 1 );   
+ % }
+% end
+

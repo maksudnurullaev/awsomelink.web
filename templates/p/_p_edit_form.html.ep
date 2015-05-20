@@ -1,16 +1,16 @@
-<h1>New project ID: <span class="label label-default"><%= $project_id %></span></h1>
-
 %= form_for '/my/p/add' => ( method => 'post' ) => begin
  %= include '_form_errors' ;
- %= hidden_field project_id  => $project_id ;
  %= hidden_field object_name => 'project' ;
+ %= include '_form_group', f_name => 'Project ID', f_type => 'text', f_value => $prefix, f_access => 'ro' ;
  %= include '_form_group', f_name => 'Title', f_type => 'text' ;
- %= include '_form_group', f_name => 'Password', f_type => 'password' ;
- %= include '_form_group', f_name => 'Password confirmation', f_type => 'password' ;
   <div class="form-group">
     <label for="description">Description (optional)</label>
     <textarea name="description" id="description" class="form-control" rows="3"><%= param('description') %></textarea>
   </div>
-  <button type="submit" class="btn btn-default">Create</button>
+   <button type="submit" class="btn btn-default">Update</button>
+   <p class="navbar-text navbar-right">
+    <a class="btn btn-warning">Close</a>
+    <a class="btn btn-danger">Delete</a>
+   </p>
 % end
 

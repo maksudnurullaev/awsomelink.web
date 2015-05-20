@@ -33,6 +33,37 @@ sub trim{
     return(undef);
 };
 
+sub validate{
+    my ($c,$mandatories,$optionals) = @_;
+    my $data = { object_name => $c->param('object_name') };
+    for my $field (@{$mandatories}){
+        $data->{$field} = Utils::trim $c->param($field);
+        if ( !$data->{$field} ){
+            if( ! exists $data->{error} ) {
+                $data->{error} = 1 ;
+                $c->stash( "error_empty" => 1 );
+            }
+            $c->stash(($field . '_validation') => 'has-error');
+        } else {
+            $c->stash(($field . '_validation') => 'has-success');
+        }
+    }
+    for my $field (@{$optionals}){
+        $data->{$field} = $c->param($field) if $c->param($field);
+    }
+    return($data);
+};
+
+sub validate_password2{
+    my ($c,$data) = @_ ;
+    my ($password1,$password2) = ($data->{password},$data->{password_confirmation});
+    if ( length($password1) < 4 
+            || $password1 ne $password2 ){
+        $data->{error} = 1 if ! exists $data->{error};
+        $c->stash( "error_password" => 1 );
+    }
+};
+
 sub is_mobile_browser {
         # http://www.davekb.com/browse_programming_tips:detect_mobile_browser_in_perl:txt
         # http://detectmobilebrowser.com/mobile
@@ -46,7 +77,7 @@ sub is_mobile_browser {
         return 0;
 };
 
-sub validate_passwords{
+sub validate_password3{
     my ($password1, $password2, $old_password) = @_;
     return(0) if ( length($password1) < 4 )
         || ($password1 ne $password2) ;

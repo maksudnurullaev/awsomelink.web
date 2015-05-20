@@ -1,0 +1,21 @@
+<p>
+ <ul class="nav nav-pills">
+  % for my $key (sort keys %{$_links} ){
+   % my $_l = $_links->{$key}{_l};
+   % my $_n = $_links->{$key}{_n} || ucfirst($_l);
+   % if( exists $_links->{$key}{_c} ) {
+    %= tag li => ( role => 'presentation', class => ($_l eq $action ? 'active' : '') ) => begin
+     %= link_to "/$prefix/p/$_l" => begin
+      %= $_n
+      %= tag span => ( class => 'badge' ) => $_links->{$key}{_c} ;
+     % end 
+    % end
+   % } else {    
+    %= tag li => ( role => 'presentation', class => ($_l eq $action ? 'active' : '') ) => begin
+     %= link_to $_n => "/$prefix/p/$_l" ;
+    % end
+   % }
+  % }
+ </ul>
+</p>
+

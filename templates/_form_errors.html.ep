@@ -1,0 +1,6 @@
+% if( stash("error_empty") ){
+    <p class="text-center bg-danger">Empty mandatory field(s)!</p>
+% }
+% if( stash("error_password") ){
+    <p class="text-center bg-danger">Empty, invalid or not equal password fields!</p>
+% }
