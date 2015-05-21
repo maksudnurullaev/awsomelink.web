@@ -155,6 +155,11 @@ sub get_uuid{
     return(lc($result[0]));
 };
 
+sub get_date_uuid{
+    my $result= Time::Piece->new->strftime('%Y.%m.%d %T ');
+    return($result . get_uuid());
+};
+
 # END OF PACKAGE
 };
 

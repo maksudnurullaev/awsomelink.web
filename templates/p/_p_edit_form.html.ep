@@ -1,16 +1,20 @@
-%= form_for '/my/p/add' => ( method => 'post' ) => begin
+%= form_for "/$prefix/p/edit" => ( method => 'post' ) => begin
  %= include '_form_errors' ;
  %= hidden_field object_name => 'project' ;
+ %= hidden_field object_id => stash('id') ;
  %= include '_form_group', f_name => 'Project ID', f_type => 'text', f_value => $prefix, f_access => 'ro' ;
  %= include '_form_group', f_name => 'Title', f_type => 'text' ;
   <div class="form-group">
     <label for="description">Description (optional)</label>
-    <textarea name="description" id="description" class="form-control" rows="3"><%= param('description') %></textarea>
+    <textarea name="description" id="description" class="form-control" rows="3"><%= param('description') || stash('description') %></textarea>
   </div>
-   <button type="submit" class="btn btn-default">Update</button>
-   <p class="navbar-text navbar-right">
-    <a class="btn btn-warning">Close</a>
-    <a class="btn btn-danger">Delete</a>
-   </p>
+  <table class="table">
+   <tr><td>
+    <button type="submit" class="btn btn-default">Update</button>
+   </td><td class="text-right">
+    %= link_to 'Close' => "/$prefix/p/close" => (class => "btn btn-warning");
+    %= link_to 'Delete' => "/$prefix/p/delete" => (class => "btn btn-danger");
+   </td>
+  </table> 
 % end
 

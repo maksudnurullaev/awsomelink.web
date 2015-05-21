@@ -39,4 +39,4 @@
   </body>
 </html>
 
-%= tag pre => dumper(stash);
+%#= tag pre => dumper(stash);
