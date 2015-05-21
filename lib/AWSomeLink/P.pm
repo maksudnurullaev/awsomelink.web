@@ -31,8 +31,10 @@ sub add {
 sub edit {
     my $c = shift ;
     my $prefix = Utils::trim $c->stash->{prefix} ;
-
     my $db = Db->new($c) ;
+
+    Utils::P::post_update($c,$db) if lc($c->req->method) eq 'post' ;
+
     my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
 };

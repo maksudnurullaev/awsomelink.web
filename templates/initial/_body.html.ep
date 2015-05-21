@@ -2,11 +2,6 @@
 % if ( $files && scalar(keys %{$files}) ){
  %= include 'initial/_lfiles', files => $files ; 
 % } else {
- % my $keys = S3Manager::get_keys($prefix);
- % if( defined($keys) && scalar @{$keys} ){
-  %= include 'initial/_files', response => $keys ;
- % } else {
   %= include 'initial/_nodata' ;   
- % }    
 % }
 

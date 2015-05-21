@@ -1,21 +1,20 @@
 package AWSomeLink::Initial; {
 use Mojo::Base 'Mojolicious::Controller';
-use S3Manager ;
+# use S3Manager ;
 use Utils;
+use Db;
+use Utils::P;
 
 sub start {
     my $self = shift;
-    my $prefix = Utils::trim $self->stash->{prefix};
-    if( $prefix && length($prefix) >= 8 ){
-        my $keys = S3Manager::get_keys($prefix);
-        $self->stash( keys => $keys );
+    my $prefix = Utils::trim($self->stash->{prefix} || $self->param('prefix'));
+    if( !$prefix || length($prefix) < 8 ){
+        $self->stash(error => "Invalid LinkID!") if $prefix;
     } else {
-        $prefix = Utils::trim $self->param('prefix');
-        if( $prefix && length($prefix) >= 8 ){
-            $self->redirect_to("/$prefix");
-        } else {
-            $self->stash(error => "Invalid LinkID!") if $prefix;
-        }
+        my $db = Db->new($self);
+        warn $prefix;
+        $self->redirect_to("/$prefix/p/edit") if 
+            Utils::P::project_exist($self,$db,$prefix) ;
     }
 }
 

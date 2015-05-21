@@ -34,6 +34,24 @@ sub post_add {
     return(0)
 };
 
+sub post_update{
+    my ($c,$db) = @_;
+    if( !$c || !$db ){
+        warn "Variables not define properly to add new project!";
+        return(undef);
+    }
+    my $data = Utils::validate($c,['id','object_name','title'],['description']);
+    if( !exists $data->{error} ){
+        if( $db->update($data) ){
+            $c->stash( "success_updated" => 1 );
+            return(1);
+        } else {
+            $c->stash( "error_updated" => 1 );
+        }
+    }
+    return(0)
+};
+
 sub project_exist{
     my($c,$db,$project_id) = @_;
     if( !$c || !$db || !$project_id ){
@@ -61,7 +79,6 @@ sub project_deploy{
         my $object = $objects->{$project_id};
         for my $key (keys %{$object}){
             $c->stash($key => $object->{$key});
-            warn "$key => $object->{$key}";
         }
     } else {
         $c->stash( "error_project_not_exist" => 1 );

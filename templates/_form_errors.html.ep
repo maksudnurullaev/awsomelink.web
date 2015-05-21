@@ -10,3 +10,9 @@
 % if( stash("error_project_not_exist") ){
     <p class="text-center bg-danger">Project with ID <strong><%= $prefix %></strong> not exists!</p>
 % }
+% if( stash("error_updated") ){
+    <p class="text-center bg-danger">Error!</p>
+% }
+% if( stash("success_updated") ){
+    <p class="text-center bg-success">Updated successfully!</p>
+% }

@@ -1,7 +1,7 @@
 %= form_for "/$prefix/p/edit" => ( method => 'post' ) => begin
  %= include '_form_errors' ;
  %= hidden_field object_name => 'project' ;
- %= hidden_field object_id => stash('id') ;
+ %= hidden_field id => stash('id') ;
  %= include '_form_group', f_name => 'Project ID', f_type => 'text', f_value => $prefix, f_access => 'ro' ;
  %= include '_form_group', f_name => 'Title', f_type => 'text' ;
   <div class="form-group">
