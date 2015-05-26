@@ -22,7 +22,7 @@ sub post_add {
         return(undef);
     }
     my $data = Utils::validate($c,['title','project_id','password','password_confirmation'],['description']);
-    Utils::validate_password2($c,$data);
+    return if ! Utils::validate_password2($c,$data->{password},$data->{password_confirmation});
     if( ! exists $data->{error} ){
         delete $data->{password_confirmation} ;
         if( !project_exist($c,$db,$data->{project_is}) ){
@@ -40,7 +40,8 @@ sub post_update{
         warn "Variables not define properly to add new project!";
         return(undef);
     }
-        my $data = Utils::validate($c,['id','object_name','title'],['description']);
+
+    my $data = Utils::validate($c,['id','object_name','title'],['description']);
     if( !exists $data->{error} ){
         if( $db->update($data) ){
             $c->stash( "success_updated" => 1 );
@@ -78,7 +79,7 @@ sub project_deploy{
     if( $objects && exists( $objects->{$project_id} ) ){
         my $object = $objects->{$project_id};
         for my $key (keys %{$object}){
-            $c->stash($key => $object->{$key});
+            $c->stash($key => $object->{$key}) if $key !~ /password/ ;
         }
     } else {
         $c->stash( "error_project_not_exist" => 1 );
@@ -91,17 +92,47 @@ sub authorization{
         warn "Variables not define properly to detect project existance!";
         return(0);
     }
-    warn "$project_id,$password";
+
     my $object_id = Utils::P::project_exist($c,$db,$project_id) ;
     if( $object_id ){
         my $objects = $db->get_objects( { id => [$object_id], field => ['password'] } );
         if( $objects && exists( $objects->{$object_id} ) ){
             my $object = $objects->{$object_id};
-            warn "$password eq $object->{password}";
             return(1) if $password eq $object->{password} ;
         }
     }
     return(0);
+};
+
+sub change_password{
+    my ($c,$db,$prefix) = @_;
+    if( !$c || !$db || !$prefix ){
+        warn "Variables not define properly to change project's password!";
+        return(undef);
+    }
+
+    # 1. check mandatory fields
+    my $data = Utils::validate($c,['old_password','new_password','new_password_confirmation'], ['id','object_name','project_id']);
+    return if exists $data->{error} ;
+    # 2. validate new password 
+    return if ! Utils::validate_password2($c,$data->{new_password},$data->{new_password_confirmation});
+    # 3. check old password
+    if( ! authorization($c,$db,$prefix,$data->{old_password}) ){
+        $c->stash( "invalid_password" => 1 );
+        return;
+    }
+    return if exists $data->{error} ;
+    # 4. update to new password
+    my $new_data = {
+        id => $data->{id},
+        object_name => $data->{object_name},
+        password => $data->{new_password}
+    };
+    if( $db->update($new_data) ){
+        $c->stash( "success_updated" => 1 );
+    } else {
+        $c->stash( "error_updated" => 1 );
+    }
 };
 
 # END OF PACKAGE

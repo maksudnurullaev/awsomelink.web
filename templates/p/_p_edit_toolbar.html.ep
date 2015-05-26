@@ -1,0 +1,7 @@
+% my $_links =  { '_1' => { _l => 'edit', _n => 'Main' } };
+% $_links->{'_2'} = { _l => 'password' } ;
+% $_links->{'_3'} = { _l => 'properties', _c => 0 } ;
+% $_links->{'_4'} = { _l => 'recipients', _c => 0 } ;
+% $_links->{'_5'} = { _l => 'screenshots', _c => 0 } ;
+%= include 'p/_link_btn', _links => $_links ;
+

@@ -1,4 +1,4 @@
-% my $f_name_ = lc( $f_name =~ s/\s/_/r );
+% my $f_name_ = lc( $f_name =~ s/\s/_/rg );
 % my $f_access = stash('f_access') || 'rw' ;
 % my $f_value =$f_type eq 'password' ? '' : stash('f_value') || param($f_name_) || stash($f_name_);
 % my $_class = stash($f_name_ . '_validation') || '';

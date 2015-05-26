@@ -30,15 +30,22 @@ sub add {
     }
 };
 
-sub edit {
-    my $c = shift ;
+sub _check_access{
+    my $c = shift;
     my $prefix = Utils::trim $c->stash->{prefix} ;
     if( !$c->is_project_editor ){
         my $path = "/$prefix/p/authorization";
         $c->redirect_to($path) ;
-        return;
+        return(0);
     }
+    return(1);
+};
 
+sub edit {
+    my $c = shift ;
+    return if ! _check_access($c);
+
+    my $prefix = Utils::trim $c->stash->{prefix} ;
     my $db = Db->new($c) ;
     Utils::P::post_update($c,$db) if lc($c->req->method) eq 'post' ;
 
@@ -65,6 +72,20 @@ sub authorization{
             $c->stash( "invalid_password" => 1 );
         }
     }
+    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
+    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+};
+
+sub password{
+    my $c = shift ;
+    return if ! _check_access($c);
+
+    my $prefix = Utils::trim $c->stash->{prefix} ;
+    my $db = Db->new($c) ;
+
+    Utils::P::change_password($c,$db,$prefix)
+        if lc($c->req->method) eq 'post';
+
     my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
 };
