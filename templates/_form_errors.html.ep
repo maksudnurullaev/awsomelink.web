@@ -4,6 +4,9 @@
 % if( stash("error_password") ){
     <p class="text-center bg-danger">Empty, invalid or not equal password fields!</p>
 % }
+% if( stash("invalid_password") ){
+    <p class="text-center bg-danger">Invalid password!</p>
+% }
 % if( stash("error_project_already_exist") ){
     <p class="text-center bg-danger">Project with ID <strong><%= $prefix %></strong> already exists!</p>
 % }

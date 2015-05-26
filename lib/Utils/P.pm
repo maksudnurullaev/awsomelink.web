@@ -40,7 +40,7 @@ sub post_update{
         warn "Variables not define properly to add new project!";
         return(undef);
     }
-    my $data = Utils::validate($c,['id','object_name','title'],['description']);
+        my $data = Utils::validate($c,['id','object_name','title'],['description']);
     if( !exists $data->{error} ){
         if( $db->update($data) ){
             $c->stash( "success_updated" => 1 );
@@ -83,6 +83,25 @@ sub project_deploy{
     } else {
         $c->stash( "error_project_not_exist" => 1 );
     }
+};
+
+sub authorization{
+    my ($c,$db,$project_id,$password) = @_;
+    if( !$c || !$db || !$project_id || !$password){
+        warn "Variables not define properly to detect project existance!";
+        return(0);
+    }
+    warn "$project_id,$password";
+    my $object_id = Utils::P::project_exist($c,$db,$project_id) ;
+    if( $object_id ){
+        my $objects = $db->get_objects( { id => [$object_id], field => ['password'] } );
+        if( $objects && exists( $objects->{$object_id} ) ){
+            my $object = $objects->{$object_id};
+            warn "$password eq $object->{password}";
+            return(1) if $password eq $object->{password} ;
+        }
+    }
+    return(0);
 };
 
 # END OF PACKAGE

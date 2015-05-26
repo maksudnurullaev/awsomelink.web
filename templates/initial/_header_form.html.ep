@@ -1,7 +1,7 @@
-<form class="form-inline" action="/">
+<form class="form-inline" action="/" method="post">
   <div class="form-group">
     <label class="sr-only" for="LinkID">Link ID</label>
-    % if( $prefix ) {
+    % if( $prefix && $prefix ne 'my' ) {
      <input name="prefix" class="form-control" id="LinkID" value="<%= $prefix %>">
     % } else {
      <input name="prefix" class="form-control" id="LinkID" placeholder="Link ID">
@@ -9,7 +9,7 @@
   </div>
   <div class="form-group">
     <label class="sr-only" for="Password">Password (optional)</label>
-    <input name="password" class="form-control" id="Password" placeholder="Password (optional)">
+    <input name="password" type="password" class="form-control" id="Password" placeholder="Password (optional)">
   </div>
   <button type="submit" class="btn btn-primary">Go</button>
 </form>

@@ -38,5 +38,3 @@
     <![endif]-->
   </body>
 </html>
-
-%= tag pre => dumper(stash);

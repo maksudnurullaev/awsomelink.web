@@ -6,15 +6,22 @@ use Db;
 use Utils::P;
 
 sub start {
-    my $self = shift;
-    my $prefix = Utils::trim($self->stash->{prefix} || $self->param('prefix'));
+    my $c = shift;
+    warn $c->req->method;
+    return if lc($c->req->method) ne 'post' ;
+    
+    my $prefix = Utils::trim($c->param('prefix') || $c->stash->{prefix});
+
     if( !$prefix || length($prefix) < 8 ){
-        $self->stash(error => "Invalid LinkID!") if $prefix;
+        $c->stash(error => "Invalid LinkID!") if $prefix;
     } else {
-        my $db = Db->new($self);
-        warn $prefix;
-        $self->redirect_to("/$prefix/p/edit") if 
-            Utils::P::project_exist($self,$db,$prefix) ;
+        if( lc($c->req->method) eq 'post' ){
+            my $db = Db->new($c);
+            if( Utils::P::project_exist($c,$db,$prefix) ){
+                my $path = "/$prefix/p/edit";
+                $c->redirect_to($path) ;
+            }
+        }
     }
 }
 
