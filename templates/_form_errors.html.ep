@@ -19,3 +19,6 @@
 % if( stash("success_updated") ){
     <p class="text-center bg-success">Updated successfully!</p>
 % }
+% if( stash("invalid_file") ){
+    <p class="text-center bg-danger">Invalid file!</p>
+% }

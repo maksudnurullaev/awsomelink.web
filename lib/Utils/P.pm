@@ -135,6 +135,33 @@ sub change_password{
     }
 };
 
+sub post_files{
+    my($c,$prefix) = @_;
+    if( !$c || !$prefix ){
+        warn "Variables not define properly save project files!";
+        return(undef);
+    }
+    my $file = $c->param('file_0');
+    if( !$file ){
+        $c->stash( "invalid_file" => 1 );
+        return;
+    }
+    my $path_file = get_files_path($c,$prefix) . '/' . $file->filename;
+    $file->move_to($path_file);
+};
+
+sub get_files_path{
+    my($c,$prefix) = @_;
+    if( !$c || !$prefix ){
+        warn "Variables not define properly get project files path!";
+        return(undef);
+    }
+    my $folder = "FILES/$prefix/FILES";
+    my $path = $c->app->home->rel_dir($folder);
+    system "mkdir -p '$path/'" if ! -d $path ;
+    return($path);
+};
+
 # END OF PACKAGE
 };
 

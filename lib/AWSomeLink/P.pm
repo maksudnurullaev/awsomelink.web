@@ -97,8 +97,7 @@ sub files{
     my $prefix = Utils::trim $c->stash->{prefix} ;
     my $db = Db->new($c) ;
 
-#    Utils::P::change_password($c,$db,$prefix)
-#        if lc($c->req->method) eq 'post';
+    Utils::P::post_files($c,$prefix) if lc($c->req->method) eq 'post' ;
 
     my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;

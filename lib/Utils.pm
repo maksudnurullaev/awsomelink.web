@@ -102,6 +102,15 @@ sub get_files{
     return( $result );
 };
 
+sub get_files_count{
+    my ($c,$prefix) = @_ ;
+    return(undef) if !$c || !$prefix ;
+    my $path = $c->app->home->rel_dir("FILES/$prefix/FILES");
+    return(0) if ! -d $path ;
+    my @files = <"$path/*">;
+    return( scalar(@files) );
+};
+
 sub sync_meta{
     my $path = shift;
     my $meta_file = "$path/META.TXT";

@@ -1,18 +1,23 @@
-%= form_for "/$prefix/p/screenshots" => ( method => 'post' ) => begin
+%= form_for "/$prefix/p/files" => (enctype => 'multipart/form-data') => ( method => 'post' ) => begin
  %= include '_form_errors' ;
  %= hidden_field object_name => 'project' ;
  %= hidden_field id => stash('id') ;
  %= include '_form_group', f_name => 'Project ID', f_type => 'text', f_value => $prefix, f_access => 'ro' ;
  %= include '_form_group', f_name => 'Title', f_type => 'text', f_access => 'ro' ;
-
+<hr />
+<h2>Add file</h2>
 % if( ! browser->mobile() ){
  <div class="form-group">
   <label for="file_0">Select file</label>
   <input type="file" id="file_0" name="file_0">
  </div>
  %= include '_paste_block_chrome' if browser->chrome() ;
- <button type="submit" class="btn btn-default">Update</button>
+ <button type="submit" class="btn btn-default">Add</button>
 % }
 
 % end
 
+<hr />
+
+<h2>Files</h2>
+%= include 'initial/_body' ;
