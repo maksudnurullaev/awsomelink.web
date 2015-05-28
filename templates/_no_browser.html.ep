@@ -1,0 +1,4 @@
+<div class="alert alert-warning alert-dismissible text-center" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Warning!</strong> For all features use Firefox, IE or Chrome browser!
+</div>
