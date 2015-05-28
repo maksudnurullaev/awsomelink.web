@@ -142,7 +142,7 @@ sub post_files{
         return(undef);
     }
     my $file = $c->param('file_0');
-    if( !$file ){
+    if( !$file || !$file->filename ){
         $c->stash( "invalid_file" => 1 );
         return;
     }
