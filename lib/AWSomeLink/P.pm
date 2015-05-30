@@ -60,7 +60,7 @@ sub authorization{
     # 1. check for empty password
     my $password = Utils::trim $c->param('password');
     if( !$password ){
-        $c->stash( "invalid_password" => 1 );
+        $c->stash( "error_auth" => 1 );
     } else {
         # 2. check for password
         if( lc($c->req->method) eq 'post' &&  
@@ -69,7 +69,7 @@ sub authorization{
             $c->redirect_to("/$prefix/p/edit");
             return;
         } else {
-            $c->stash( "invalid_password" => 1 );
+            $c->stash( "error_auth" => 1 );
         }
     }
     my $object_id = Utils::P::project_exist($c,$db,$prefix) ;

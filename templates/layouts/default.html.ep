@@ -16,6 +16,7 @@
     <!-- Custom styles for this template FIXED! -->
     <link href="/theme.css" rel="stylesheet">
     <link href="/docs.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
   </head>
   <body role="document">
     %= include 'layouts/_nav' ;

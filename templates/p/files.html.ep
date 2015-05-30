@@ -1,5 +1,5 @@
 % layout 'default';
 
-<h1>Screenshots</h1>
+<h1>Files</h1>
 %= include 'p/_p_edit_toolbar' ;
 %= include 'p/_p_files_form' ;
