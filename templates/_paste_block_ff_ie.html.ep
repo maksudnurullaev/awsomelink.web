@@ -1,0 +1,7 @@
+<p class="help-block">OR/AND</p>
+
+<div class="input-group">
+ <iframe id="editFrame" title="paste image here" style="margin-bottom:20px" src="/paste_page_ff_ie.html" onload="setupPasteFeatures()"></iframe>
+</div>
+
+<p><div class="row" id="pasteCollector"></div></p>

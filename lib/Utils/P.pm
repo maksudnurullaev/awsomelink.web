@@ -14,6 +14,7 @@ use warnings;
 use utf8;
 use Data::Dumper;
 use Utils;
+use MIME::Base64;
 
 sub post_add {
     my ($c,$db) = @_;
@@ -142,12 +143,31 @@ sub post_files{
         return(undef);
     }
     my $file = $c->param('file_0');
-    if( !$file || !$file->filename ){
-        $c->stash( "invalid_file" => 1 );
-        return;
+    my $file_found = 0;
+    if( $file && $file->filename ){
+        my $path_file = get_files_path($c,$prefix) . '/' . $file->filename;
+        $file->move_to($path_file);
+        $file_found++;
     }
-    my $path_file = get_files_path($c,$prefix) . '/' . $file->filename;
-    $file->move_to($path_file);
+    warn Dumper $c->param;
+    for my $file_name ($c->param){
+        if( $file_name =~ /screenshot/ ){
+            my $value = $c->param($file_name);
+            my $header = substr($value, 0, 50);
+            my $indx = index $header, ',';
+            warn $header ;
+            if( $indx != -1 && $header =~ /^data:image/ ){
+                my $file_data = decode_base64 substr($value,$indx+1);
+                my $path_file = get_files_path($c,$prefix) . '/' . $file_name;
+                open(my $fh, '>:raw', $path_file);
+                print $fh $file_data;
+                close $fh;
+                $file_found++;
+            }
+        }
+    }
+    $c->stash( "invalid_file" => 1 ) if ! $file_found ;
+    return;
 };
 
 sub get_files_path{

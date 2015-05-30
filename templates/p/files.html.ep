@@ -2,4 +2,4 @@
 
 <h1>Screenshots</h1>
 %= include 'p/_p_edit_toolbar' ;
-%= include 'p/_p_screenshots_form' ;
+%= include 'p/_p_files_form' ;

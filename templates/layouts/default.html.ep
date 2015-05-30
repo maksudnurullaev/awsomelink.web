@@ -38,9 +38,9 @@
     <![endif]-->
     <!-- My Javascripts -->
 % if( browser->chrome() ){
- %= javascript 'https://awsome.link/paste_chrome.js'
+ %= javascript 'https://awsome.link/paste_chrome.js' ;
 % } elsif( browser->ie() || browser->firefox() ) {
-
+  %= javascript 'https://awsome.link/paste_ff_ie.js' ;
 % } else {
  %= tag p => (style=>"margin-top: 50px;") => include('_no_browser')
 % }
