@@ -1,0 +1,9 @@
+% my $f_name_ = lc( $f_name =~ s/\s/_/rg );
+% my $_class = stash($f_name_ . '_validation') || '';
+%= tag div => (class => "form-group $_class") => begin
+ %= label_for $f_name_ => $f_name ;
+ %= text_area $f_name_ =>(id=>$f_name_, class=>"form-control", rows=>"3") => begin
+  %= param($f_name_) ;
+ % end
+% end
+

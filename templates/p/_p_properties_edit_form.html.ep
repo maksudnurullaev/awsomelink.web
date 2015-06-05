@@ -1,0 +1,14 @@
+%= form_for "/$prefix/$controller/properties_update" => (enctype => 'multipart/form-data') => ( method => 'post' ) => begin
+ %= include '_form_errors' ;
+ %= hidden_field object_name => 'property' ;
+ %= hidden_field id => stash('payload') ;
+ %= include '_form_group', f_name => 'Project ID', f_type => 'text', f_value => $prefix, f_access => 'ro' ;
+ %= include '_form_group', f_name => 'Title', f_type => 'text', f_access => 'ro' ;
+ <hr />
+ <h2>Edit property</h2>
+ %= include '_form_group', f_name => 'Name', f_type => 'text' ;
+ %= include '_form_group_textarea', f_name => 'Values' ;
+ <button type="submit" class="btn btn-primary">Update</button>
+ %= link_to 'Cancel' => "/$prefix/p/properties" => (class=>'btn btn-default', role=>"button") ;
+ %= link_to 'Delete' => "/$prefix/p/properties_delete/$payload" => (class=>'btn btn-danger', role=>"button") ;
+% end

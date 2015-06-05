@@ -1,0 +1,22 @@
+<div class="row">
+ <table class="table table-striped">
+  <thead>
+   <tr>
+    <th>Name</th>
+    <th>Value</th>
+   </tr>
+  </thead>
+  <tbody>
+% for my $key ( keys %{$properties} ){
+% my $name = $properties->{$key}{name} ;
+% my $value = $properties->{$key}{values} ;
+% my @values = split(/\n/,$value);
+  <tr>
+    <td><%= link_to $name => "/$prefix/p/properties/$key" %></td>
+    <td><%= select_field $name => \@values %></td>
+  </tr>
+% }
+ </tbody>
+</table>
+</div>
+

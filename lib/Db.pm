@@ -16,6 +16,7 @@ use Utils;
 use DBI;
 use DBD::SQLite;
 use Utils::Filter;
+use Utils::P;
 use Data::Dumper;
 
 my $DB_SQLite_TYPE  = 0;
@@ -29,23 +30,29 @@ sub set_production_mode{ $_production_mode = shift; };
 sub get_production_mode{ $_production_mode; };
 
 sub new {
-    my $class = shift;
-    my $controller  = shift;
-    my $self = { controller => $controller, file => $controller->app->home->rel_file('db/main.db') };
-    return(bless $self, $class);
+    my ($class,$c,$prefix) = @_ ;
+
+    if( !$c || !$prefix ){
+        warn "Variables not define properly to create project's database!";
+        return(undef);
+    }
+
+    my $path = $c->app->home->rel_dir("FILES/$prefix");
+    my $self = bless { c => $c, path => $path, file => "$path/main.db" }, $class ;
+
+    return($self);
 };
 
-sub is_valid{
+sub is_valid {
     my $self = shift;
-    return( $self->initialize ) if ! -e $self->{'file'};
     return ( -e $self->{'file'} );
 };
 
-sub get_db_connection{
+sub get_db_connection {
     my $self = shift;
     return $self->{dbh} if exists($self->{dbh}) && defined($self->{dbh}) ;
     if($DB_CURRENT_TYPE == $DB_SQLite_TYPE){
-        my $dbi_connection_string = "dbi:SQLite:dbname=" . $self->{'file'};
+        my $dbi_connection_string = "dbi:SQLite:dbname=" . $self->{'file'} ;
         my $dbh = DBI->connect($dbi_connection_string,undef,undef, 
                    {sqlite_unicode => 1, AutoCommit => 1});
         if(!defined($dbh)){
@@ -67,6 +74,11 @@ sub get_db_connection{
 sub initialize{
     my $self = shift;
     return(1) if( -e $self->{'file'} );
+    if( ! -d $self->{path} ){
+        system "mkdir -p '" . $self->{path} . "/'" ;
+    }
+    warn $self->{path};
+
     if($DB_CURRENT_TYPE == $DB_SQLite_TYPE){
         my $connection = $self->get_db_connection() || die "Could not connect to SQLite database";
         if(defined($connection)){

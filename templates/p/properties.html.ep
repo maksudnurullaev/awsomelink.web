@@ -1,0 +1,13 @@
+% layout 'default';
+
+<h1>Properties</h1>
+%= include 'p/_p_edit_toolbar' ;
+
+%= include ( $payload ? 'p/_p_properties_edit_form' : 'p/_p_properties_add_form' ) ;
+
+% my $properties = stash 'properties' ;
+% if ( $properties ){
+ <hr />
+ %= include 'p/_p_properties_list', properties => $properties ; 
+% } 
+%#= tag pre => dumper(stash);

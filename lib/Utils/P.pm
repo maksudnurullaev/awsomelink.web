@@ -26,11 +26,24 @@ sub post_add {
     return if ! Utils::validate_password2($c,$data->{password},$data->{password_confirmation});
     if( ! exists $data->{error} ){
         delete $data->{password_confirmation} ;
-        if( !project_exist($c,$db,$data->{project_is}) ){
+        if( !project_exist($c,$db,$data->{project_id}) ){
             return(1) if $db->insert($data) ;
         } else {
             $c->stash( "error_project_already_exist" => 1 );
         }
+    }
+    return(0)
+};
+
+sub post_properties {
+    my ($c,$db) = @_;
+    if( !$c || !$db ){
+        warn "Variables not define properly to add new project's property!";
+        return(undef);
+    }
+    my $data = Utils::validate($c,['name','values']);
+    if( ! exists $data->{error} ){
+        return(1) if $db->insert($data) ;
     }
     return(0)
 };
@@ -85,6 +98,15 @@ sub project_deploy{
     } else {
         $c->stash( "error_project_not_exist" => 1 );
     }
+};
+
+sub project_properties_deploy{
+    my($c,$db) = @_;
+    if( !$c || !$db ){
+        warn "Variables not define properly to detect project existance!";
+        return(undef);
+    }
+    $c->stash( properties => $db->get_objects( { name => ['property'] } ) );
 };
 
 sub authorization{
@@ -149,13 +171,11 @@ sub post_files{
         $file->move_to($path_file);
         $file_found++;
     }
-    warn Dumper $c->param;
     for my $file_name ($c->param){
         if( $file_name =~ /screenshot/ ){
             my $value = $c->param($file_name);
             my $header = substr($value, 0, 50);
             my $indx = index $header, ',';
-            warn $header ;
             if( $indx != -1 && $header =~ /^data:image/ ){
                 my $file_data = decode_base64 substr($value,$indx+1);
                 my $path_file = get_files_path($c,$prefix) . '/' . $file_name;

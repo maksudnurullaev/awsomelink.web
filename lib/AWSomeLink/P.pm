@@ -19,8 +19,8 @@ sub add {
 
     if( lc($c->req->method) eq 'post' ){
         my $prefix = $c->param("project_id");
-        my $db = Db->new($c);
-        if( Utils::P::post_add($c,$db) ){
+        my $db = Db->new($c,$prefix);
+        if( $db->initialize && Utils::P::post_add($c,$db) ){
             $c->redirect_to("/$prefix/p/edit");
         } else {
             $c->stash( project_id => $prefix );
@@ -46,7 +46,7 @@ sub edit {
     return if ! _check_access($c);
 
     my $prefix = Utils::trim $c->stash->{prefix} ;
-    my $db = Db->new($c) ;
+    my $db = Db->new($c,$prefix) ;
     Utils::P::post_update($c,$db) if lc($c->req->method) eq 'post' ;
 
     my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
@@ -55,8 +55,8 @@ sub edit {
 
 sub authorization{
     my $c = shift;
-    my $db = Db->new($c) ;
     my $prefix = Utils::trim $c->stash->{prefix} ;
+    my $db = Db->new($c,$prefix) ;
     # 1. check for empty password
     my $password = Utils::trim $c->param('password');
     if( !$password ){
@@ -81,7 +81,7 @@ sub password{
     return if ! _check_access($c);
 
     my $prefix = Utils::trim $c->stash->{prefix} ;
-    my $db = Db->new($c) ;
+    my $db = Db->new($c,$prefix) ;
 
     Utils::P::change_password($c,$db,$prefix)
         if lc($c->req->method) eq 'post';
@@ -95,12 +95,38 @@ sub files{
     return if ! _check_access($c);
 
     my $prefix = Utils::trim $c->stash->{prefix} ;
-    my $db = Db->new($c) ;
+    my $db = Db->new($c,$prefix) ;
 
     Utils::P::post_files($c,$prefix) if lc($c->req->method) eq 'post' ;
 
     my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+};
+
+sub properties{
+    my $c = shift ;
+    return if ! _check_access($c);
+
+    my $prefix = Utils::trim $c->stash->{prefix} ;
+    my $db = Db->new($c,$prefix) ;
+
+    Utils::P::post_properties($c,$db) if lc($c->req->method) eq 'post' ;
+
+    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
+    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    Utils::P::project_properties_deploy($c,$db) ;
+};
+
+sub properties_delete{
+    my $c = shift ;
+    return if ! _check_access($c);
+
+    my $prefix = Utils::trim $c->stash->{prefix} ;
+    my $payload = Utils::trim $c->stash->{payload} ;
+    my $db = Db->new($c,$prefix) ;
+    $db->del($payload);
+
+    $c->redirect_to("/$prefix/p/properties");
 };
 
 sub close{

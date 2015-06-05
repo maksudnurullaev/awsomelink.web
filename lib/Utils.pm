@@ -1,4 +1,4 @@
- package Utils; {
+package Utils; {
 
 =encoding utf8
 
@@ -109,6 +109,18 @@ sub get_files_count{
     return(0) if ! -d $path ;
     my @files = <"$path/*">;
     return( scalar(@files) );
+};
+
+sub get_properties_count{
+    my ($c,$prefix) = @_ ;
+    if( !$c || !$prefix ){
+        warn "Variables not define properly to detect properties!";
+        return(0);
+    }
+    my $db = Db->new($c,$prefix) ;
+    my $properties = $db->get_objects( { name => ['property'] } );
+    return(0) if ! $properties ;
+    return(scalar(keys(%{$properties}))) ;
 };
 
 sub sync_meta{
