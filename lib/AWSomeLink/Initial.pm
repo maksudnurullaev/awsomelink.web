@@ -7,7 +7,6 @@ use Utils::P;
 
 sub start {
     my $c = shift;
-    warn $c->req->method;
     return if lc($c->req->method) ne 'post' ;
     
     my $prefix = Utils::trim($c->param('prefix') || $c->stash->{prefix});
@@ -16,7 +15,7 @@ sub start {
         $c->stash(error => "Invalid LinkID!") if $prefix;
     } else {
         if( lc($c->req->method) eq 'post' ){
-            my $db = Db->new($c);
+            my $db = Db->new($c,$prefix);
             if( Utils::P::project_exist($c,$db,$prefix) ){
                 my $path = "/$prefix/p/edit";
                 $c->redirect_to($path) ;

@@ -10,4 +10,3 @@
  <hr />
  %= include 'p/_p_properties_list', properties => $properties ; 
 % } 
-%#= tag pre => dumper(stash);
