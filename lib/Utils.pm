@@ -168,6 +168,30 @@ sub get_date_uuid{
     return($result . get_uuid());
 };
 
+sub db_deploy{
+    my ($c,$dbc,$id,$prefix,$params) = @_ ;
+    return(0) if !$dbc || !$id ;
+
+    my $_params = { id => [$id] };
+    if( $params ){
+        for my $key( keys %{$params} ){
+            $_params->{$key} = $params->{$key} ;
+        }
+    }
+    my $objects = $dbc->get_objects( $_params );
+    if( $objects && exists($objects->{$id}) ){
+        my $object = $objects->{$id};
+        for my $key (keys %{$object}){
+            if( $prefix ){
+                $c->stash("$prefix.$key" => $object->{$key});
+            } else {
+                $c->stash($key => $object->{$key});
+            }
+        }
+        return($object);
+    }
+    return(undef);
+};
 # END OF PACKAGE
 };
 

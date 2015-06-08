@@ -48,6 +48,19 @@ sub post_properties {
     return(0)
 };
 
+sub post_properties_update {
+    my ($c,$db,$id) = @_;
+    if( !$c || !$db || !$id ){
+        warn "Variables not define properly to update project's property!";
+        return(undef);
+    }
+    my $data = Utils::validate($c,['id','name','values']);
+    if( ! exists $data->{error} ){
+        return(1) if $db->del($id) && $db->insert($data) ;
+    }
+    return(0)
+};
+
 sub post_update{
     my ($c,$db) = @_;
     if( !$c || !$db ){
