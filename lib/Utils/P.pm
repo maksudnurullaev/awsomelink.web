@@ -48,6 +48,20 @@ sub post_properties {
     return(0)
 };
 
+sub post_recipients {
+    my ($c,$db) = @_;
+    if( !$c || !$db ){
+        warn "Variables not define properly to add new project's recipients!";
+        return(undef);
+    }
+    my $data = Utils::validate($c,['name','email','password']);
+    if( ! exists $data->{error} ){
+        return(1) if $db->insert($data) ;
+    }
+    return(0)
+};
+
+
 sub post_properties_update {
     my ($c,$db,$id) = @_;
     if( !$c || !$db || !$id ){
@@ -113,13 +127,13 @@ sub project_deploy{
     }
 };
 
-sub project_properties_deploy{
-    my($c,$db) = @_;
-    if( !$c || !$db ){
-        warn "Variables not define properly to detect project existance!";
+sub project_deploy_{
+    my($c,$db,$name,$names) = @_;
+    if( !$c || !$db || !$name || !$names ){
+        warn "Variables not define properly deploy project related onbjects!";
         return(undef);
     }
-    $c->stash( properties => $db->get_objects( { name => ['property'] } ) );
+    $c->stash( $names => $db->get_objects( { name => [$name] } ) ) ;
 };
 
 sub authorization{

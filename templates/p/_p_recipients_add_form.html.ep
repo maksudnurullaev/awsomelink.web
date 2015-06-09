@@ -1,0 +1,13 @@
+%= form_for "/$prefix/$controller/$action" => (enctype => 'multipart/form-data') => ( method => 'post' ) => begin
+ %= include '_form_errors' ;
+ %= hidden_field object_name => 'recipient' ;
+ %= hidden_field id => stash('id') ;
+ %= include '_form_group', f_name => 'Project ID', f_type => 'text', f_value => $prefix, f_access => 'ro' ;
+ %= include '_form_group', f_name => 'Title', f_type => 'text', f_access => 'ro' ;
+ <hr />
+ <h2>Add new recipient</h2>
+ %= include '_form_group', f_name => 'Name', f_type => 'text', f_class => 'col-md-4' ;
+ %= include '_form_group', f_name => 'Email', f_type => 'email', f_class => 'col-md-4' ;
+ %= include '_form_group', f_name => 'Password', f_type => 'text', f_class => 'col-md-4' ;
+ <button type="submit" class="btn btn-default">Add</button>
+% end

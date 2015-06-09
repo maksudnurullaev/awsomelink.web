@@ -1,0 +1,13 @@
+% layout 'default';
+
+<h1>Recipients</h1>
+%= include 'p/_p_edit_toolbar' ;
+
+%= include ( $payload ? 'p/_p_recipients_edit_form' : 'p/_p_recipients_add_form' ) ;
+
+% my $recipients = stash 'recipients' ;
+% if ( $recipients ){
+ <hr />
+ %= include 'p/_p_recipients_list', recipients => $recipients ; 
+% } 
+%# = tag pre => dumper(stash);

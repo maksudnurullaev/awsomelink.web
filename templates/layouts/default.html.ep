@@ -43,7 +43,6 @@
 % } elsif( browser->ie() || browser->firefox() ) {
   %= javascript 'https://awsome.link/paste_ff_ie.js' ;
 % } elsif( $controller eq 'initial' ) {
- %= $controller ;
  %= tag p => (style=>"margin-top: 50px;") => include('_no_browser')
 % }
     <script src="https://awsome.link/holder.min.js"></script>

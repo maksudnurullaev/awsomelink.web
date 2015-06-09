@@ -1,0 +1,24 @@
+<div class="row">
+ <table class="table table-striped">
+  <thead>
+   <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Password</th>
+   </tr>
+  </thead>
+  <tbody>
+% for my $key ( keys %{$recipients} ){
+% my $name = $recipients->{$key}{name} ;
+% my $email = $recipients->{$key}{email} ;
+% my $password = $recipients->{$key}{password};
+  <tr>
+    <td><%= link_to $name => "/$prefix/p/recipients/$key" %></td>
+    <td><%= link_to $email => "mailto:$email?subject=AWSomeLink to $name&body=Your password is '$password'. " %></td>
+    <td><%= $password %></td> 
+  </tr>
+% }
+ </tbody>
+</table>
+</div>
+

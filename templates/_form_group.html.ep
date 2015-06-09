@@ -2,6 +2,8 @@
 % my $f_access = stash('f_access') || 'rw' ;
 % my $f_value =$f_type eq 'password' ? '' : param($f_name_) || stash($f_name_);
 % my $_class = stash($f_name_ . '_validation') || '';
+% $_class .= ( $_class ? ' ' : '' );
+% $_class .= ( stash('f_class') ? stash('f_class') : '' ) ;
 %= tag div => ( class => "form-group $_class" ) => begin 
  %= tag label => ( for => $f_name_ ) => $f_name ;
  % if( $f_access eq 'rw' ){

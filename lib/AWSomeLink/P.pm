@@ -103,6 +103,25 @@ sub files{
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
 };
 
+sub recipients{
+    my $c = shift ;
+    return if ! _check_access($c);
+
+    my $prefix = Utils::trim $c->stash->{prefix} ;
+    my $db = Db->new($c,$prefix) ;
+
+    Utils::P::post_recipients($c,$db) if lc($c->req->method) eq 'post' ;
+
+    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
+    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    Utils::P::project_deploy_($c,$db,'recipient','recipients') ;
+
+    my $payload = Utils::trim $c->stash->{payload};
+    Utils::db_deploy($c,$db,$payload) if $payload;
+    
+    $c->stash( password => substr(Utils::get_uuid(),0,4) );
+};
+
 sub properties{
     my $c = shift ;
     return if ! _check_access($c);
@@ -114,7 +133,7 @@ sub properties{
 
     my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
-    Utils::P::project_properties_deploy($c,$db) ;
+    Utils::P::project_deploy_($c,$db,'property','properties') ;
 
     my $payload = Utils::trim $c->stash->{payload};
     Utils::db_deploy($c,$db,$payload) if $payload;

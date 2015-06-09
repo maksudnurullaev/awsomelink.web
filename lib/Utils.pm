@@ -170,6 +170,7 @@ sub get_date_uuid{
 
 sub db_deploy{
     my ($c,$dbc,$id,$prefix,$params) = @_ ;
+    warn $prefix if $prefix ;
     return(0) if !$dbc || !$id ;
 
     my $_params = { id => [$id] };
