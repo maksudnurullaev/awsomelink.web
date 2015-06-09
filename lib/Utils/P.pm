@@ -51,7 +51,7 @@ sub post_properties {
 sub post_recipients {
     my ($c,$db) = @_;
     if( !$c || !$db ){
-        warn "Variables not define properly to add new project's recipients!";
+        warn "Variables not define properly to add new project's recipient!";
         return(undef);
     }
     my $data = Utils::validate($c,['name','email','password']);
@@ -61,6 +61,18 @@ sub post_recipients {
     return(0)
 };
 
+sub post_recipients_update {
+    my ($c,$db,$id) = @_;
+    if( !$c || !$db || !$id ){
+        warn "Variables not define properly to update project's recipient!";
+        return(undef);
+    }
+    my $data = Utils::validate($c,['id','name','email','password']);
+    if( ! exists $data->{error} ){
+        return(1) if $db->del($id) && $db->insert($data) ;
+    }
+    return(0)
+};
 
 sub post_properties_update {
     my ($c,$db,$id) = @_;

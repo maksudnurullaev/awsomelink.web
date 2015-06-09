@@ -1,4 +1,4 @@
-%= form_for "/$prefix/$controller/$action" => (enctype => 'multipart/form-data') => ( method => 'post' ) => begin
+%= form_for "/$prefix/$controller/recipients_update" => (enctype => 'multipart/form-data') => ( method => 'post' ) => begin
  %= include '_form_errors' ;
  %= hidden_field object_name => 'recipient' ;
  %= hidden_field id => stash('id') ;
@@ -6,9 +6,12 @@
  %= include '_form_group', f_name => 'Project ID', f_type => 'text', f_value => $prefix, f_access => 'ro' ;
  %= include '_form_group', f_name => 'Title', f_type => 'text', f_access => 'ro' ;
  <hr />
- <h2>Add new recipient</h2>
+ <h2>Edit recipient</h2>
  %= include '_form_group', f_name => 'Name', f_type => 'text', f_class => 'col-md-4' ;
  %= include '_form_group', f_name => 'Email', f_type => 'email', f_class => 'col-md-4' ;
  %= include '_form_group', f_name => 'Password', f_type => 'text', f_class => 'col-md-4', f_access => 'ro' ;
- <button type="submit" class="btn btn-default">Add</button>
+ <button type="submit" class="btn btn-primary">Update</button>
+ %= link_to 'Cancel' => "/$prefix/p/recipients" => (class=>'btn btn-default', role=>"button") ;
+ %= link_to 'Delete' => "/$prefix/p/recipients_delete/$payload" => (class=>'btn btn-danger', role=>"button") ;
 % end
+

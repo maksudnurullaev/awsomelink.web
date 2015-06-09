@@ -14,7 +14,7 @@
 % my $password = $recipients->{$key}{password};
   <tr>
     <td><%= link_to $name => "/$prefix/p/recipients/$key" %></td>
-    <td><%= link_to $email => "mailto:$email?subject=AWSomeLink to $name&body=Your password is '$password'. " %></td>
+    <td><%= link_to $email => "mailto:$email?subject=AWSome.Link invite you&body=Your password is '$password'. " %></td>
     <td><%= $password %></td> 
   </tr>
 % }

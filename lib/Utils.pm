@@ -111,14 +111,14 @@ sub get_files_count{
     return( scalar(@files) );
 };
 
-sub get_properties_count{
-    my ($c,$prefix) = @_ ;
+sub get_dbobjects_count{
+    my ($c,$prefix,$name) = @_ ;
     if( !$c || !$prefix ){
-        warn "Variables not define properly to detect properties!";
+        warn "Variables not define properly to detect db objects count!";
         return(0);
     }
     my $db = Db->new($c,$prefix) ;
-    my $properties = $db->get_objects( { name => ['property'] } );
+    my $properties = $db->get_objects( { name => [$name] } );
     return(0) if ! $properties ;
     return(scalar(keys(%{$properties}))) ;
 };
@@ -170,7 +170,6 @@ sub get_date_uuid{
 
 sub db_deploy{
     my ($c,$dbc,$id,$prefix,$params) = @_ ;
-    warn $prefix if $prefix ;
     return(0) if !$dbc || !$id ;
 
     my $_params = { id => [$id] };

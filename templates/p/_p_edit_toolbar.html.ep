@@ -1,7 +1,7 @@
 % my $_links =  { '_1' => { _l => 'edit', _n => 'Main' } };
 % $_links->{'_2'} = { _l => 'password' } ;
-% $_links->{'_3'} = { _l => 'properties', _c => Utils::get_properties_count($self,$prefix) } ;
-% $_links->{'_4'} = { _l => 'recipients', _c => 0 } ;
+% $_links->{'_3'} = { _l => 'properties', _c => Utils::get_dbobjects_count($self,$prefix,'property') } ;
+% $_links->{'_4'} = { _l => 'recipients', _c => Utils::get_dbobjects_count($self,$prefix,'recipient') } ;
 % $_links->{'_5'} = { _l => 'files', _c => Utils::get_files_count($self,$prefix) } ;
 % $_links->{'_6'} = { _l => 'close' } ;
 %= include 'p/_link_btn', _links => $_links ;
