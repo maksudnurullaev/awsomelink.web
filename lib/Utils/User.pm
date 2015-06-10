@@ -23,30 +23,31 @@ sub is_project_editor{
 };
 
 sub set_project_editor{
-    my $c = shift ;
+    my ($c,$prefix) = @_ ;
     return if !$c ;
-    $c->session->{'project editor'} = 1;
+    $c->session->{'project editor'} = 1 ;
+    $c->session->{'project id'} = $prefix ;
 };
 
-sub is_survey_editor{
+sub is_tester_editor{
     my $c = shift ;
     if( $c && $c->session ){
-        return($c->session->{'survey editor'} );
+        return($c->session->{'project tester'} );
     }
     return;
 };
 
-sub set_survey_editor{
+sub set_tester_editor{
     my $c = shift ;
     return if !$c ;
-    $c->session->{'survey editor'} = 1;
+    $c->session->{'project tester'} = 1;
 };
 
 sub is_editor_for{
     my ($c,$type) = @_;
     return if !$c || !$type ;
     return(is_project_editor($c)) if( lc($type) eq 'project' );
-    return(is_survey_editor($c))  if( lc($type) eq 'survey' );
+    return(is_tester_editor($c))  if( lc($type) eq 'tester' );
 };
 
 sub logout{

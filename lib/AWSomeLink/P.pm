@@ -49,7 +49,7 @@ sub edit {
     my $db = Db->new($c,$prefix) ;
     Utils::P::post_update($c,$db) if lc($c->req->method) eq 'post' ;
 
-    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
+    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
 };
 
@@ -65,15 +65,23 @@ sub authorization{
         # 2. check for password
         if( lc($c->req->method) eq 'post' &&  
                 Utils::P::authorization($c,$db,$prefix,$password) ){
-            Utils::User::set_project_editor($c);
+            Utils::User::set_project_editor($c,$prefix);
             $c->redirect_to("/$prefix/p/edit");
             return;
         } else {
             $c->stash( "error_auth" => 1 );
         }
     }
-    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
-    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
+    if( $object_id ) {
+        Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    } else {
+        if( $prefix ){
+            $c->redirect_to("/$prefix") ;
+        } else { 
+            $c->redirect_to("/") ;
+        }
+    }
 };
 
 sub password{
@@ -86,7 +94,7 @@ sub password{
     Utils::P::change_password($c,$db,$prefix)
         if lc($c->req->method) eq 'post';
 
-    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
+    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
 };
 
@@ -99,7 +107,7 @@ sub files{
 
     Utils::P::post_files($c,$prefix) if lc($c->req->method) eq 'post' ;
 
-    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
+    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
 };
 
@@ -112,7 +120,7 @@ sub recipients{
 
     Utils::P::post_recipients($c,$db) if lc($c->req->method) eq 'post' ;
 
-    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
+    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
     Utils::P::project_deploy_($c,$db,'recipient','recipients') ;
 
@@ -133,7 +141,7 @@ sub properties{
 
     Utils::P::post_properties($c,$db) if lc($c->req->method) eq 'post' ;
 
-    my $object_id = Utils::P::project_exist($c,$db,$prefix) ;
+    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
     Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
     Utils::P::project_deploy_($c,$db,'property','properties') ;
     my $payload = Utils::trim $c->stash->{payload};

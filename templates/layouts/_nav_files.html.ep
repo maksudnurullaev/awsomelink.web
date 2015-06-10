@@ -1,0 +1,9 @@
+% my $_fcount = Utils::get_files_count($self,$_prefix);
+% if( ! $_fcount ) {
+ <%= link_to Files => "/$_prefix" %>
+% } else {
+ %= link_to "/$prefix" => begin
+Files 
+ %= tag span => ( class => 'badge' ) => $_fcount ;
+ % end 
+% }

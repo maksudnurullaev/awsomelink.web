@@ -26,7 +26,7 @@ sub post_add {
     return if ! Utils::validate_password2($c,$data->{password},$data->{password_confirmation});
     if( ! exists $data->{error} ){
         delete $data->{password_confirmation} ;
-        if( !project_exist($c,$db,$data->{project_id}) ){
+        if( !get_project_db_id($c,$db,$data->{project_id}) ){
             return(1) if $db->insert($data) ;
         } else {
             $c->stash( "error_project_already_exist" => 1 );
@@ -106,9 +106,9 @@ sub post_update{
     return(0)
 };
 
-sub project_exist{
+sub get_project_db_id{
     my($c,$db,$project_id) = @_;
-    if( !$c || !$db || !$project_id ){
+    if( !$c || !$db || !$project_id || !$db->is_valid ){
         warn "Variables not define properly to detect project existance!";
         return(undef);
     }
@@ -155,7 +155,7 @@ sub authorization{
         return(0);
     }
 
-    my $object_id = Utils::P::project_exist($c,$db,$project_id) ;
+    my $object_id = Utils::P::get_project_db_id($c,$db,$project_id) ;
     if( $object_id ){
         my $objects = $db->get_objects( { id => [$object_id], field => ['password'] } );
         if( $objects && exists( $objects->{$object_id} ) ){

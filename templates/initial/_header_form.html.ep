@@ -4,12 +4,8 @@
     % if( $prefix && $prefix ne 'my' ) {
      <input name="prefix" class="form-control" id="LinkID" value="<%= $prefix %>">
     % } else {
-     <input name="prefix" class="form-control" id="LinkID" placeholder="Link ID">
+     <input name="prefix" class="form-control" id="LinkID" placeholder="Enter ID">
     % }
-  </div>
-  <div class="form-group">
-    <label class="sr-only" for="Password">Password (optional)</label>
-    <input name="password" type="password" class="form-control" id="Password" placeholder="Password (optional)">
   </div>
   <button type="submit" class="btn btn-primary">Go</button>
 </form>

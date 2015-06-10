@@ -23,7 +23,6 @@ sub start{
     for my $upload (@{$self->req->uploads}){
         my $path_file = "$path/" . $upload->filename;
         $upload->move_to($path_file);
-        warn $path_file;
     }
 };
 
@@ -49,7 +48,6 @@ sub download{
     my $filename = $self->stash('payload');
     my $folder = "FILES/$prefix/FILES";
     my $path_file = $self->app->home->rel_file("$folder/$filename");
-    warn $path_file;
     if( -e $path_file ){
         $self->render_file('filepath' => $path_file, 'filename' => $filename);
     } else {

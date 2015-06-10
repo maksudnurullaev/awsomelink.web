@@ -16,10 +16,8 @@ sub start {
     } else {
         if( lc($c->req->method) eq 'post' ){
             my $db = Db->new($c,$prefix);
-            if( Utils::P::project_exist($c,$db,$prefix) ){
-                my $path = "/$prefix/p/edit";
-                $c->redirect_to($path) ;
-            }
+            my $path = $db->is_valid ? "/$prefix/p/edit" : "/$prefix" ;
+            $c->redirect_to($path) ;
         }
     }
 }
