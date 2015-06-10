@@ -14,11 +14,13 @@ use warnings;
 use utf8;
 use Data::Dumper;
 use Utils;
+use Utils::User;
 use MIME::Base64;
+use Db;
 
 sub post_add {
     my ($c,$db) = @_;
-    if( !$c || !$db ){
+    if( !$c || !$db || !$db->is_valid ){
         warn "Variables not define properly to add new project!";
         return(undef);
     }
@@ -26,7 +28,7 @@ sub post_add {
     return if ! Utils::validate_password2($c,$data->{password},$data->{password_confirmation});
     if( ! exists $data->{error} ){
         delete $data->{password_confirmation} ;
-        if( !get_project_db_id($c,$db,$data->{project_id}) ){
+        if( !get_project_db_id($db,$data->{project_id}) ){
             return(1) if $db->insert($data) ;
         } else {
             $c->stash( "error_project_already_exist" => 1 );
@@ -37,7 +39,7 @@ sub post_add {
 
 sub post_properties {
     my ($c,$db) = @_;
-    if( !$c || !$db ){
+    if( !$c || !$db || !$db->is_valid ){
         warn "Variables not define properly to add new project's property!";
         return(undef);
     }
@@ -50,7 +52,7 @@ sub post_properties {
 
 sub post_recipients {
     my ($c,$db) = @_;
-    if( !$c || !$db ){
+    if( !$c || !$db || !$db->is_valid ){
         warn "Variables not define properly to add new project's recipient!";
         return(undef);
     }
@@ -63,7 +65,7 @@ sub post_recipients {
 
 sub post_recipients_update {
     my ($c,$db,$id) = @_;
-    if( !$c || !$db || !$id ){
+    if( !$c || !$db || !$db->is_valid || !$id ){
         warn "Variables not define properly to update project's recipient!";
         return(undef);
     }
@@ -76,7 +78,7 @@ sub post_recipients_update {
 
 sub post_properties_update {
     my ($c,$db,$id) = @_;
-    if( !$c || !$db || !$id ){
+    if( !$c || !$db || !$db->is_valid || !$id ){
         warn "Variables not define properly to update project's property!";
         return(undef);
     }
@@ -89,7 +91,7 @@ sub post_properties_update {
 
 sub post_update{
     my ($c,$db) = @_;
-    if( !$c || !$db ){
+    if( !$c || !$db || !$db->is_valid ){
         warn "Variables not define properly to add new project!";
         return(undef);
     }
@@ -107,8 +109,8 @@ sub post_update{
 };
 
 sub get_project_db_id{
-    my($c,$db,$project_id) = @_;
-    if( !$c || !$db || !$project_id || !$db->is_valid ){
+    my($db,$project_id) = @_;
+    if( !$db || !$project_id || !$db->is_valid ){
         warn "Variables not define properly to detect project existance!";
         return(undef);
     }
@@ -124,7 +126,7 @@ sub get_project_db_id{
 
 sub project_deploy{
     my($c,$db,$project_id) = @_;
-    if( !$c || !$db || !$project_id ){
+    if( !$c || !$db || !$project_id || !$db->is_valid ){
         warn "Variables not define properly to detect project existance!";
         return(0);
     }
@@ -141,34 +143,16 @@ sub project_deploy{
 
 sub project_deploy_{
     my($c,$db,$name,$names) = @_;
-    if( !$c || !$db || !$name || !$names ){
+    if( !$c || !$db || !$db->is_valid || !$name || !$names ){
         warn "Variables not define properly deploy project related onbjects!";
         return(undef);
     }
     $c->stash( $names => $db->get_objects( { name => [$name] } ) ) ;
 };
 
-sub authorization{
-    my ($c,$db,$project_id,$password) = @_;
-    if( !$c || !$db || !$project_id || !$password){
-        warn "Variables not define properly to detect project existance!";
-        return(0);
-    }
-
-    my $object_id = Utils::P::get_project_db_id($c,$db,$project_id) ;
-    if( $object_id ){
-        my $objects = $db->get_objects( { id => [$object_id], field => ['password'] } );
-        if( $objects && exists( $objects->{$object_id} ) ){
-            my $object = $objects->{$object_id};
-            return(1) if $password eq $object->{password} ;
-        }
-    }
-    return(0);
-};
-
 sub change_password{
     my ($c,$db,$prefix) = @_;
-    if( !$c || !$db || !$prefix ){
+    if( !$c || !$db || !$prefix || !$db->is_valid ){
         warn "Variables not define properly to change project's password!";
         return(undef);
     }
@@ -179,7 +163,7 @@ sub change_password{
     # 2. validate new password 
     return if ! Utils::validate_password2($c,$data->{new_password},$data->{new_password_confirmation});
     # 3. check old password
-    if( ! authorization($c,$db,$prefix,$data->{old_password}) ){
+    if( ! Utils::User::authorized($db,$prefix,$data->{old_password}) ){
         $c->stash( "invalid_password" => 1 );
         return;
     }

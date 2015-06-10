@@ -16,7 +16,6 @@ use Utils;
 use DBI;
 use DBD::SQLite;
 use Utils::Filter;
-use Utils::P;
 use Data::Dumper;
 
 my $DB_SQLite_TYPE  = 0;

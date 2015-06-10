@@ -27,8 +27,6 @@ our $VERSION        = 'v0.0.1b';
 
 sub register {
     my ($self,$app) = @_;
-    $app->helper( is_project_editor => sub { Utils::User::is_project_editor(@_); } );
-    $app->helper( is_survey_editor  => sub { Utils::User::is_survey_editor(@_); } );
 };
 
 };

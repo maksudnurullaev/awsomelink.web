@@ -33,8 +33,8 @@ sub add {
 sub _check_access{
     my $c = shift;
     my $prefix = Utils::trim $c->stash->{prefix} ;
-    if( !$c->is_project_editor ){
-        my $path = "/$prefix/p/authorization";
+    if( !$c->session('user type') ){
+        my $path = "/$prefix/p/authorization" ;
         $c->redirect_to($path) ;
         return(0);
     }
@@ -49,32 +49,37 @@ sub edit {
     my $db = Db->new($c,$prefix) ;
     Utils::P::post_update($c,$db) if lc($c->req->method) eq 'post' ;
 
-    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
-    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    my $project_db_id = Utils::P::get_project_db_id($db,$prefix) ;
+    Utils::P::project_deploy($c,$db,$project_db_id) if $project_db_id ;
 };
 
-sub authorization{
+sub authorization {
     my $c = shift;
     my $prefix = Utils::trim $c->stash->{prefix} ;
     my $db = Db->new($c,$prefix) ;
-    # 1. check for empty password
-    my $password = Utils::trim $c->param('password');
-    if( !$password ){
-        $c->stash( "error_auth" => 1 );
-    } else {
-        # 2. check for password
-        if( lc($c->req->method) eq 'post' &&  
-                Utils::P::authorization($c,$db,$prefix,$password) ){
-            Utils::User::set_project_editor($c,$prefix);
-            $c->redirect_to("/$prefix/p/edit");
-            return;
-        } else {
+    my $project_db_id = Utils::P::get_project_db_id($db,$prefix) ;
+    if( $project_db_id ) {
+        my $password = Utils::trim $c->param('password');
+        if( !$password ){
             $c->stash( "error_auth" => 1 );
+        } else {
+            # 2. check for password
+            if( lc($c->req->method) eq 'post' &&  
+                    Utils::User::authorized($c,$db,$password) ){
+                my $user_type = $c->session->{'user type'};
+                if( $user_type eq 'project' ){
+                    $c->redirect_to("/$prefix/p/edit");
+                } elsif( $user_type eq 'recipient' ){
+                    $c->redirect_to("/$prefix/r/edit");
+                } else {
+                    warn "Uknown user type: $user_type";
+                }
+                return;
+            } else {
+                $c->stash( "error_auth" => 1 );
+            }
         }
-    }
-    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
-    if( $object_id ) {
-        Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+        Utils::P::project_deploy($c,$db,$project_db_id) ;
     } else {
         if( $prefix ){
             $c->redirect_to("/$prefix") ;
@@ -94,8 +99,8 @@ sub password{
     Utils::P::change_password($c,$db,$prefix)
         if lc($c->req->method) eq 'post';
 
-    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
-    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    my $project_db_id = Utils::P::get_project_db_id($db,$prefix) ;
+    Utils::P::project_deploy($c,$db,$project_db_id) if $project_db_id ;
 };
 
 sub files{
@@ -107,8 +112,8 @@ sub files{
 
     Utils::P::post_files($c,$prefix) if lc($c->req->method) eq 'post' ;
 
-    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
-    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    my $project_db_id = Utils::P::get_project_db_id($db,$prefix) ;
+    Utils::P::project_deploy($c,$db,$project_db_id) if $project_db_id ;
 };
 
 sub recipients{
@@ -120,8 +125,8 @@ sub recipients{
 
     Utils::P::post_recipients($c,$db) if lc($c->req->method) eq 'post' ;
 
-    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
-    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    my $project_db_id = Utils::P::get_project_db_id($db,$prefix) ;
+    Utils::P::project_deploy($c,$db,$project_db_id) if $project_db_id ;
     Utils::P::project_deploy_($c,$db,'recipient','recipients') ;
 
     my $payload = Utils::trim $c->stash->{payload};
@@ -141,8 +146,8 @@ sub properties{
 
     Utils::P::post_properties($c,$db) if lc($c->req->method) eq 'post' ;
 
-    my $object_id = Utils::P::get_project_db_id($c,$db,$prefix) ;
-    Utils::P::project_deploy($c,$db,$object_id) if $object_id ;
+    my $project_db_id = Utils::P::get_project_db_id($db,$prefix) ;
+    Utils::P::project_deploy($c,$db,$project_db_id) if $project_db_id ;
     Utils::P::project_deploy_($c,$db,'property','properties') ;
     my $payload = Utils::trim $c->stash->{payload};
     Utils::db_deploy($c,$db,$payload) if $payload;

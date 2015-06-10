@@ -4,7 +4,7 @@
     % if( $prefix && $prefix ne 'my' ) {
      <input name="prefix" class="form-control" id="LinkID" value="<%= $prefix %>">
     % } else {
-     <input name="prefix" class="form-control" id="LinkID" placeholder="Enter ID">
+     <input name="prefix" class="form-control" id="LinkID" placeholder="Project ID">
     % }
   </div>
   <button type="submit" class="btn btn-primary">Go</button>

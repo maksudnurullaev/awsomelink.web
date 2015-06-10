@@ -12,42 +12,38 @@ use 5.012000;
 use strict;
 use warnings;
 use utf8;
+use Db;
+use Data::Dumper;
 
-sub is_project_editor{
-    my $c = shift ;
-    return if !$c ;
-    if( $c && $c->session ){
-        return( $c->session->{'project editor'} );
+sub authorized {
+    my ($c,$db,$password) = @_;
+    if( !$db || !$db->is_valid  || !$password ){
+        warn "Variables not define properly to detect project existance!";
+        return(undef);
     }
-    return;
-};
 
-sub set_project_editor{
-    my ($c,$prefix) = @_ ;
-    return if !$c ;
-    $c->session->{'project editor'} = 1 ;
-    $c->session->{'project id'} = $prefix ;
-};
-
-sub is_tester_editor{
-    my $c = shift ;
-    if( $c && $c->session ){
-        return($c->session->{'project tester'} );
+    my $objects = $db->get_objects( { value => [$password], field => ['password'] } );
+    if( $objects ){
+        my @keys = keys(%{$objects});
+        my $size = scalar(@keys);
+        if ( $size == 0 ){ # not found!
+            return(undef);
+        } elsif( $size > 1 ){
+            warn "Password is not unique in database scope!";
+            return(undef);
+        }
+        $objects = $db->get_objects( { id => [$keys[0]] } );
+        warn Dumper $objects;
+        $c->session->{'project id'} = Utils::trim $c->stash->{prefix} ;
+        $c->session->{'user type'} = $objects->{$keys[0]}{object_name};
+        $c->session->{'user id'} = $keys[0];
+        if( $objects->{$keys[0]}{object_name} eq 'recipient' ){
+            $c->session->{'user email'} = $objects->{$keys[0]}{email};
+            $c->session->{'user name'} = $objects->{$keys[0]}{name};
+        }
+        return(1);
     }
-    return;
-};
-
-sub set_tester_editor{
-    my $c = shift ;
-    return if !$c ;
-    $c->session->{'project tester'} = 1;
-};
-
-sub is_editor_for{
-    my ($c,$type) = @_;
-    return if !$c || !$type ;
-    return(is_project_editor($c)) if( lc($type) eq 'project' );
-    return(is_tester_editor($c))  if( lc($type) eq 'tester' );
+    return(undef);
 };
 
 sub logout{

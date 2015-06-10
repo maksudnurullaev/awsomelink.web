@@ -1,4 +1,5 @@
-% my $_fcount = Utils::get_files_count($self,$_prefix);
+% my $_fcount = Utils::get_files_count($self,$_prefix) || 0 ;
+% my $_prefix = $prefix || '' ;
 % if( ! $_fcount ) {
  <%= link_to Files => "/$_prefix" %>
 % } else {

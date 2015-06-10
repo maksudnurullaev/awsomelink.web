@@ -5,6 +5,7 @@
  %= include '_form_errors' ;
  %= include '_form_group', f_name => 'Project ID', f_type => 'text', f_value => $prefix, f_access => 'ro' ;
  %= include '_form_group', f_name => 'Password', f_type => 'password', f_value => '' ;
- <button type="submit" class="btn btn-default">Submit</button>
+ <button type="submit" class="btn btn-primary">Submit</button>
+ %= link_to 'Cancel' => "/my/p" => (class=>'btn btn-default', role=>"button") ;
 % end
 
