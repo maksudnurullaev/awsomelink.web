@@ -13,12 +13,18 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
       % my $_prefix = session('project id') || $prefix || 'my' ;
-      % if ( $controller eq 'p' ){
+      % my $_ut = session('user type');
+      % my $_p = ($_ut && $_ut eq 'recipient') ? 'r' : 'p' ;
+      % if ( $controller ne 'r' ){
+       % if ( $controller eq 'p' ){   
         <li><%= include 'layouts/_nav_files', _prefix => $_prefix %></li>
-        <li class="active"><%= link_to Project => "/$_prefix/p" %></li>
-      % } else {    
+        <li class="active"><%= link_to Project => "/$_prefix/$_p" %></li>
+       % } else {
         <li class="active"><%= include 'layouts/_nav_files', _prefix => $_prefix %></li>
-        <li><%= link_to Project => "/$_prefix/p" %></li>
+        <li><%= link_to Project => "/$_prefix/$_p" %></li>
+       % }    
+      % } else {    
+        <li class="active"><%= link_to Project => "/$_prefix/$_p" %></li>
       % }
       </ul>
     </div><!--/.nav-collapse -->

@@ -1,0 +1,6 @@
+% layout 'default';
+%= include 'r/_header' ;
+<p>
+ %= include '_form_group', f_name => 'Title', f_type => 'text', f_access => 'ro' ;
+ %= include '_form_group_textarea', f_name => 'Description', f_access => 'ro' ;
+</p>

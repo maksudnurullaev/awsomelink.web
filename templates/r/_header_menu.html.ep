@@ -1,0 +1,7 @@
+% my $_links =  { '_1' => { _l => 'start', _n => 'Main' } };
+% $_links->{'_2'} = { _l => 'files', _c => Utils::get_files_count($self,$prefix) } ;
+% $_links->{'_3'} = { _l => 'issues', _c => Utils::get_dbobjects_count($self,$prefix,'issue') } ;
+% $_links->{'_4'} = { _l => 'recipients', _n => 'Participants', _c => Utils::get_dbobjects_count($self,$prefix,'recipient') } ;
+% $_links->{'_6'} = { _l => 'close' , _path => "/$prefix/p/close" } ;
+%= include 'p/_link_btn', _links => $_links ;
+

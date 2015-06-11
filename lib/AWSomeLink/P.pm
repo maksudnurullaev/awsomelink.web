@@ -70,7 +70,7 @@ sub authorization {
                 if( $user_type eq 'project' ){
                     $c->redirect_to("/$prefix/p/edit");
                 } elsif( $user_type eq 'recipient' ){
-                    $c->redirect_to("/$prefix/r/edit");
+                    $c->redirect_to("/$prefix/r");
                 } else {
                     warn "Uknown user type: $user_type";
                 }

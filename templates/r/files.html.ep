@@ -1,0 +1,3 @@
+% layout 'default';
+%= include 'r/_header' ;
+%= include 'initial/_body' ;

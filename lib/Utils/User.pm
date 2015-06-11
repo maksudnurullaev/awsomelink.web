@@ -33,7 +33,6 @@ sub authorized {
             return(undef);
         }
         $objects = $db->get_objects( { id => [$keys[0]] } );
-        warn Dumper $objects;
         $c->session->{'project id'} = Utils::trim $c->stash->{prefix} ;
         $c->session->{'user type'} = $objects->{$keys[0]}{object_name};
         $c->session->{'user id'} = $keys[0];
