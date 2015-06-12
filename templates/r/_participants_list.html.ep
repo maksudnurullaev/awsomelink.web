@@ -1,0 +1,27 @@
+<div class="row">
+ <table class="table table-striped">
+  <thead>
+   <tr>
+    <th>Name</th>
+    <th>Email</th>
+   </tr>
+  </thead>
+  <tbody>
+% for my $key ( keys %{$participants} ){
+% my $name = $participants->{$key}{name} ;
+% my $email = $participants->{$key}{email} ;
+% my $password = $participants->{$key}{password};
+% my $cur_user = session('user name');
+  <tr>
+   % if( $email eq session('user email') ){
+    <td><%= link_to $name => "/$prefix/p/participants/$key" %> <span class="badge">You</span></td>
+   % } else {
+    <td><%= link_to $name => "/$prefix/p/participants/$key" %></td>
+   % }
+    <td><%= link_to $email => "mailto:$email?subject=Message from $cur_user&body=Hi $name," %></td>
+  </tr>
+% }
+ </tbody>
+</table>
+</div>
+

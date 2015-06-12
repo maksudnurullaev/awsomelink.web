@@ -1,0 +1,8 @@
+% layout 'default';
+%= include 'r/_header' ;
+
+% my $participants = stash 'participants' ;
+% if ( $participants ){
+ <hr />
+ %= include 'r/_participants_list', participants => $participants ; 
+% } 
