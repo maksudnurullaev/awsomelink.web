@@ -1,0 +1,21 @@
+<div class="row">
+ <table class="table table-striped">
+  <thead>
+   <tr>
+    <th>Description</th>
+    <th>Images</th>
+   </tr>
+  </thead>
+  <tbody>
+% for my $key ( keys %{$issues} ){
+% my $name = $issues->{$key}{name} ;
+% my $images = $issues->{$key}{images} ;
+  <tr>
+   <td><%= $name %> <span class="badge">You</span></td>
+   <td><%= $name %></td>
+  </tr>
+% }
+ </tbody>
+</table>
+</div>
+

@@ -1,9 +1,10 @@
+% my $form_part = (lc($controller) eq 'r') ;
 <div class="row">
  <table class="table table-striped">
   <thead>
    <tr>
-    <th>Name</th>
-    <th>Value</th>
+    <th>Properties</th>
+    <th>&nbsp;</th>
    </tr>
   </thead>
   <tbody>
@@ -12,7 +13,7 @@
 % my $value = $properties->{$key}{values} ;
 % my @values = split(/\n/,$value);
   <tr>
-    <td><%= link_to $name => "/$prefix/p/properties/$key" %></td>
+    <td><%= $form_part ? $name : link_to $name => "/$prefix/p/properties/$key" %></td>
     <td><%= select_field $name => \@values %></td>
   </tr>
 % }

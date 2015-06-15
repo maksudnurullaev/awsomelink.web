@@ -43,6 +43,17 @@ sub participants{
     Utils::P::project_deploy_($c,$db,'recipient','participants') ;
 };
 
+sub issues{
+    my $c = shift ;
+    return if ! _check_access($c);
+
+    my $prefix = Utils::trim $c->stash->{prefix} ;
+    my $db = Db->new($c,$prefix) ;
+
+    my $action = $c->param('action') ;
+    Utils::P::project_deploy_($c,$db,'property','properties') if lc($action) eq 'add';
+};
+
 1;
 
 };

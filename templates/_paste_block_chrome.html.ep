@@ -1,7 +1,7 @@
 <p class="help-block">OR/AND</p>
 
-<div class="input-group">
+<div class="form-group">
  <input id="pasteImageHolder" type="text" class="form-control" placeholder="Click and paste image here" aria-describedby="basic-addon1">
 </div>
 
-<p><div class="row" id="pasteCollector"></div></p>
+<div class="row" id="pasteCollector"></div>
