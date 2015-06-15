@@ -32,10 +32,10 @@ sub add {
 
 sub _check_access{
     my $c = shift;
-    my $prefix = Utils::trim $c->stash->{prefix} ;
-    if( !$c->session('user type') ){
-        my $path = "/$prefix/p/authorization" ;
-        $c->redirect_to($path) ;
+    my $user_type = $c->session('user type');
+    if( !$user_type || lc($user_type) ne 'project' ){
+        my $prefix = Utils::trim $c->stash->{prefix} ;
+        $c->redirect_to("/$prefix/p/authorization") ;
         return(0);
     }
     return(1);
