@@ -4,7 +4,7 @@ use Mojo::Base -strict;
 use File::Basename 'dirname';
 use File::Spec::Functions qw(catdir splitdir);
 use Data::Dumper;
-use Devel::Confess; # TODO - remove later!!!
+#use Devel::Confess; # TODO - remove later!!!
 
 # Source directory has precedence
 my @base = (splitdir(dirname(__FILE__)), '..');

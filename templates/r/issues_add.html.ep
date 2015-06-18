@@ -1,7 +1,10 @@
+% layout 'default';
+%= include 'r/_header' ;
+<hr />
 <h1>New issue</h1>
-
-%= form_for "/$prefix/r/add_issue" => (enctype => 'multipart/form-data') => ( id => 'form_paste', method => 'post' ) => begin
- %= include '_form_errors' ;
+%= include '_form_errors' ;
+%= form_for "/$prefix/$controller/$action" => (enctype => 'multipart/form-data') => ( id => 'form_paste', method => 'post' ) => begin
+ %= hidden_field object_name => 'issue' ;
  % my $properties = stash 'properties' ;
  % if( $properties ){
   %= include 'p/_p_properties_list', properties => $properties if $properties ; 
@@ -16,7 +19,8 @@
  </div>
  %= include '_paste_block_chrome' if browser->chrome() ;
  %= include '_paste_block_ff_ie' if browser->firefox() || browser->ie() ;
- <button type="submit" class="btn btn-default">Add</button>
+ <button type="submit" class="btn btn-primary">Add</button>
+ %= link_to 'Cancel' => "/$prefix/r/issues" => ( class=>"btn btn-default" ) ; 
 % } else {
  %= tag p => (style=>"margin-top: 50px;") => include('_no_browser')
 % }

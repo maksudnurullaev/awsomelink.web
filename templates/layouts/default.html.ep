@@ -47,6 +47,6 @@
 % }
     <script src="https://awsome.link/holder.min.js"></script>
     %#= tag pre => dumper(session);
-    %#= tag pre => dumper(stash);
+    %#= tag pre => dumper(stash('issues'));
   </body>
 </html>

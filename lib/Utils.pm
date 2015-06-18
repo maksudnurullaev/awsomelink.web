@@ -168,7 +168,7 @@ sub get_date_uuid{
     return($result . get_uuid());
 };
 
-sub db_deploy{
+sub deploy_db_object_all{
     my ($c,$dbc,$id,$prefix,$params) = @_ ;
     return(0) if !$dbc || !$id ;
 
@@ -192,6 +192,34 @@ sub db_deploy{
     }
     return(undef);
 };
+
+sub deploy_db_object{
+    my($c,$db,$dbobject_id) = @_;
+    if( !$c || !$db || !$dbobject_id || !$db->is_valid ){
+        warn "Variables not define properly to detect project existance!";
+        return(0);
+    }
+    my $objects = $db->get_objects( { id => [$dbobject_id] } );
+    if( $objects && exists( $objects->{$dbobject_id} ) ){
+        my $object = $objects->{$dbobject_id};
+        for my $key (keys %{$object}){
+            $c->stash($key => $object->{$key}) if $key !~ /password/ ;
+        }
+    } else {
+        warn "Db object with id: '$dbobject_id' not exist!" ;
+        $c->stash( "error_dbobject_not_exist" => 1 );
+    }
+};
+
+sub deploy_db_objects{
+    my($c,$db,$name,$names) = @_;
+    if( !$c || !$db || !$db->is_valid || !$name || !$names ){
+        warn "Variables not define properly deploy project related onbjects!";
+        return(undef);
+    }
+    $c->stash( $names => $db->get_objects( { name => [$name] } ) ) ;
+};
+
 # END OF PACKAGE
 };
 

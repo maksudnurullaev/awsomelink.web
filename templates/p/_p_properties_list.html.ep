@@ -11,7 +11,8 @@
 % for my $key ( keys %{$properties} ){
 % my $name = $properties->{$key}{name} ;
 % my $value = $properties->{$key}{values} ;
-% my @values = split(/\n/,$value);
+% my @values = split(/\n/,$value); 
+% chomp( @values );
   <tr>
     <td><%= $form_part ? $name : link_to $name => "/$prefix/p/properties/$key" %></td>
     <td><%= select_field $name => \@values %></td>
@@ -20,4 +21,3 @@
  </tbody>
 </table>
 </div>
-

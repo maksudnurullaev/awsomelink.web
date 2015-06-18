@@ -124,32 +124,6 @@ sub get_project_db_id{
     return(undef);
 };
 
-sub project_deploy{
-    my($c,$db,$project_id) = @_;
-    if( !$c || !$db || !$project_id || !$db->is_valid ){
-        warn "Variables not define properly to detect project existance!";
-        return(0);
-    }
-    my $objects = $db->get_objects( { id => [$project_id] } );
-    if( $objects && exists( $objects->{$project_id} ) ){
-        my $object = $objects->{$project_id};
-        for my $key (keys %{$object}){
-            $c->stash($key => $object->{$key}) if $key !~ /password/ ;
-        }
-    } else {
-        $c->stash( "error_project_not_exist" => 1 );
-    }
-};
-
-sub project_deploy_{
-    my($c,$db,$name,$names) = @_;
-    if( !$c || !$db || !$db->is_valid || !$name || !$names ){
-        warn "Variables not define properly deploy project related onbjects!";
-        return(undef);
-    }
-    $c->stash( $names => $db->get_objects( { name => [$name] } ) ) ;
-};
-
 sub change_password{
     my ($c,$db,$prefix) = @_;
     if( !$c || !$db || !$prefix || !$db->is_valid ){

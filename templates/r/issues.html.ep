@@ -1,17 +1,12 @@
 % layout 'default';
 %= include 'r/_header' ;
 
-% my $action = param 'action' ;
-% if( lc($action) eq 'add' ){
- %= include 'r/_add_issue';
-% } else { 
- %= tag p => link_to( 'New issue' => "/$prefix/r/issues?action=add" => ( class=>"btn btn-default" ) ) ; 
- % my $issues = stash 'issues' ;
- % if ( $issues ){
-  %= include 'r/_issues_list', issues => $issues ; 
- % } else {
-  <div class="alert alert-warning" role="alert">
-   <strong>No issues!</strong> You could add your first issue now.
-  </div>
- % } 
-% }
+%= tag p => link_to( 'New issue' => "/$prefix/r/issues_add" => ( class=>"btn btn-default" ) ) ; 
+% my $issues = stash 'issues' ;
+% if ( $issues ){
+ %= include 'r/_issues_list', issues => $issues ; 
+% } else {
+ <div class="alert alert-warning text-center" role="alert">
+  <strong>No issues!</strong> You could add your first issue now.
+ </div>
+% } 

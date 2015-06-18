@@ -3,16 +3,17 @@
   <thead>
    <tr>
     <th>Description</th>
-    <th>Images</th>
+    <th>Attached files</th>
    </tr>
   </thead>
   <tbody>
-% for my $key ( keys %{$issues} ){
-% my $name = $issues->{$key}{name} ;
-% my $images = $issues->{$key}{images} ;
+% my $issue_order = scalar keys %{$issues} ;
+% for my $key (reverse sort keys %{$issues} ){
+% my $description = $issues->{$key}{description} ;
   <tr>
-   <td><%= $name %> <span class="badge">You</span></td>
-   <td><%= $name %></td>
+   <td><%= $issue_order-- %>.
+   <%= link_to $description => "/$prefix/r/issue_edit/$key" %></td>
+   <td><span class="badge"><%= rfiles_count $key %></span></td>
   </tr>
 % }
  </tbody>
