@@ -25,7 +25,7 @@
 % my $files = rfiles $payload ;
 % if ( $files && scalar(keys %{$files}) ){
  <h2>Files</h2>
-%= form_for "/$prefix/$controller/issues_delete_files/$payload" => (enctype => 'multipart/form-data') => ( id => 'form_paste', method => 'post' ) => begin
+%= form_for "/$prefix/$controller/issues_delete_files/$payload" => ( method => 'post' ) => begin
  %= include 'initial/_lfiles', files => $files, postfix => "?issue=$payload", _rw => $_rw ; 
 % end
 % }

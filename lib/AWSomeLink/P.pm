@@ -116,6 +116,21 @@ sub files{
     Utils::deploy_db_object($c,$db,$project_db_id) if $project_db_id ;
 };
 
+sub files_delete{
+    my $c = shift ;
+    return if !  _check_access($c);
+
+    my $prefix = Utils::trim $c->stash->{prefix} ;
+
+    my $files = $c->every_param('files');
+    my $path = Utils::P::get_files_path($c,$prefix);
+    for my $file_name (@{$files}){
+        my $file_path = "$path/$file_name";
+        unlink $file_path if -e $file_path ;
+    }
+    $c->redirect_to("/$prefix/p/files");
+};
+
 sub recipients{
     my $c = shift ;
     return if ! _check_access($c);

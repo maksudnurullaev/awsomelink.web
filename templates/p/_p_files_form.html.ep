@@ -16,5 +16,10 @@
 
 <hr />
 
-<h2>Files</h2>
-%= include 'initial/_body' ;
+% my $files = Utils::get_files($self,$prefix);
+% if ( $files && scalar(keys %{$files}) ){
+ <h2>Files</h2>
+%= form_for "/$prefix/p/files_delete" => ( method => 'post' ) => begin
+ %= include 'initial/_lfiles', files => $files, _rw => 1 ; 
+% end
+% }
