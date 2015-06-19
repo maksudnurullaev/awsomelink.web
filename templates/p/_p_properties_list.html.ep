@@ -1,3 +1,4 @@
+% use Utils;
 % my $form_part = (lc($controller) eq 'r') ;
 <div class="row">
  <table class="table table-striped">
@@ -8,11 +9,13 @@
    </tr>
   </thead>
   <tbody>
-% for my $key ( keys %{$properties} ){
+% for my $key (sort keys %{$properties} ){
+% param( $properties->{$key}{name} => stash( $properties->{$key}{name} ) ) ;
 % my $name = $properties->{$key}{name} ;
 % my $value = $properties->{$key}{values} ;
 % my @values = split(/\n/,$value); 
-% chomp( @values );
+% Utils::trim_array \@values ;
+% param( $name => Utils::trim(stash($name)) ) ;
   <tr>
     <td><%= $form_part ? $name : link_to $name => "/$prefix/p/properties/$key" %></td>
     <td><%= select_field $name => \@values %></td>

@@ -12,7 +12,7 @@
 % my $description = $issues->{$key}{description} ;
   <tr>
    <td><%= $issue_order-- %>.
-   <%= link_to $description => "/$prefix/r/issue_edit/$key" %></td>
+   <%= link_to $description => "/$prefix/r/issues_edit/$key" %></td>
    <td><span class="badge"><%= rfiles_count $key %></span></td>
   </tr>
 % }

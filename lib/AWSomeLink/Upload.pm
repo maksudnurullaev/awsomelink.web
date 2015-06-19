@@ -10,6 +10,7 @@ package AWSomeLink::Upload; {
 
 use Mojo::Base 'Mojolicious::Controller';
 use Utils;
+use Utils::R;
 use Data::Dumper;
 
 sub start{
@@ -48,6 +49,12 @@ sub download{
     my $filename = $self->stash('payload');
     my $folder = "FILES/$prefix/FILES";
     my $path_file = $self->app->home->rel_file("$folder/$filename");
+    # check that file belongs to issue
+    my $issue_id = $self->param('issue');
+    if( $issue_id ){
+        $folder = Utils::R::get_files_path($self,$issue_id);
+        $path_file = "$folder/$filename";
+    }
     if( -e $path_file ){
         $self->render_file('filepath' => $path_file, 'filename' => $filename);
     } else {

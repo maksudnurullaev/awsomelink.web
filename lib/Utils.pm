@@ -33,6 +33,13 @@ sub trim{
     return(undef);
 };
 
+sub trim_array{
+    my $arr = shift ;
+    for my $e (@{$arr}){
+        $e = trim($e);
+    }
+};
+
 sub validate{
     my ($c,$mandatories,$optionals) = @_;
     my $data = { object_name => $c->param('object_name') };
@@ -92,9 +99,15 @@ sub get_files{
     return(undef) if !$c || !$prefix ;
     my $path = $c->app->home->rel_dir("FILES/$prefix/FILES");
     return(undef) if ! -d $path ;
+    return(get_files_formated_info($path));
+};
+
+sub get_files_formated_info{
+    my $path = shift;
     my @files = <"$path/*">;
     my $result = {};
     for my $file (@files ){
+        next if -d $file ;
         my($filename, $dirs, $suffix) = fileparse($file);
         my $st = stat($file);
         $result->{$filename} = { size => $st->[7], mdate => strftime('%Y-%m-%d %H:%M:%S', localtime( $st->[9])) } ;
@@ -108,7 +121,9 @@ sub get_files_count{
     my $path = $c->app->home->rel_dir("FILES/$prefix/FILES");
     return(0) if ! -d $path ;
     my @files = <"$path/*">;
-    return( scalar(@files) );
+    my $result = 0 ;
+    for my $file (@files ){ $result++ if ! -d $file ; }
+    return( $result );
 };
 
 sub get_dbobjects_count{
@@ -203,7 +218,9 @@ sub deploy_db_object{
     if( $objects && exists( $objects->{$dbobject_id} ) ){
         my $object = $objects->{$dbobject_id};
         for my $key (keys %{$object}){
-            $c->stash($key => $object->{$key}) if $key !~ /password/ ;
+            if( $key !~ /password/ ){ 
+                $c->stash($key => $object->{$key});
+            }
         }
     } else {
         warn "Db object with id: '$dbobject_id' not exist!" ;

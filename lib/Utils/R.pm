@@ -50,7 +50,20 @@ sub get_files_count{
     my $path = get_files_path($c,$issue_id);
     return(0) if ! -d $path ;
     my @files = <"$path/*">;
-    return( scalar(@files) );
+    my $result = 0 ;
+    for my $file (@files ){ $result++ if ! -d $file ; }
+    return( $result );
+};
+
+sub get_files_info{
+    my($c,$issue_id) = @_;
+    if( !$c || !$issue_id ){
+        warn "Variables not define properly get issue's files count!";
+        return(undef);
+    }
+    my $path = get_files_path($c,$issue_id);
+    return(undef) if ! -d $path ;
+    return(Utils::get_files_formated_info($path));
 };
 
 sub post_files{

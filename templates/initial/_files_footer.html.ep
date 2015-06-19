@@ -1,4 +1,12 @@
-        </tbody>
-      </table>
+% my $_rw = stash('_rw') ? 1 : 0 ;
+ % if( $_rw ){
+  <tr class="warning">
+   <td colspan="4">
+    <button type="submit" class="btn btn-danger">Delete</button>
+   </td>
+  <tr> 
+ % } 
+  </tbody>
+ </table>
 </div>
 

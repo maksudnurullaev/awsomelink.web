@@ -1,10 +1,14 @@
+% my $_rw = stash('_rw') ? 1 : 0 ;
 <div class="row">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>File name</th>
-            <th>Size</th>
-            <th>Last update</th>
-          </tr>
-        </thead>
-        <tbody>
+ <table class="table table-striped">
+  <thead>
+   <tr>
+    <th>File name</th>
+    <th>Size</th>
+    <th>Last update</th>
+    % if( $_rw ){
+     <th>Selection</th>
+    % }
+   </tr>
+  </thead>
+  <tbody>

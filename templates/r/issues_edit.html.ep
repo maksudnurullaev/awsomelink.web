@@ -1,0 +1,31 @@
+% layout 'default';
+%= include 'r/_header' ;
+<hr />
+<h1>Edit issue</h1>
+%= include '_form_errors' ;
+% my $_rw = (stash('owner') && session('user id') && stash('owner') eq session('user id')) ;
+%= form_for "/$prefix/$controller/$action" => (enctype => 'multipart/form-data') => ( id => 'form_paste', method => 'post' ) => begin
+ %= hidden_field object_name => 'issue' ;
+ % my $properties = stash 'properties' ;
+ % if( $properties ){
+  %= include 'p/_p_properties_list', properties => $properties if $properties ; 
+ % }
+ %= include '_form_group_textarea', f_name => 'Description' ;
+ % if( ! browser->mobile() ){
+  <hr />
+  %= include '_add_file_form_part' ; 
+  <button type="submit" class="btn btn-primary">Update</button>
+  %= link_to 'Cancel' => "/$prefix/r/issues" => ( class=>"btn btn-default" ) ; 
+  %= link_to 'Delete' => "/$prefix/r/issues_delete/$payload" => (class=>'btn btn-danger', role=>"button") ;
+ % } else {
+  %= tag p => (style=>"margin-top: 50px;") => include('_no_browser')
+ % }
+% end
+
+% my $files = rfiles $payload ;
+% if ( $files && scalar(keys %{$files}) ){
+ <h2>Files</h2>
+%= form_for "/$prefix/$controller/issues_delete_files/$payload" => (enctype => 'multipart/form-data') => ( id => 'form_paste', method => 'post' ) => begin
+ %= include 'initial/_lfiles', files => $files, postfix => "?issue=$payload", _rw => $_rw ; 
+% end
+% }

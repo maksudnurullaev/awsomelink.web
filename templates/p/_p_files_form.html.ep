@@ -6,13 +6,7 @@
  %= include '_form_group', f_name => 'Title', f_type => 'text', f_access => 'ro' ;
 % if( ! browser->mobile() ){
  <hr />
- <h2>Add file</h2>
- <div class="form-group">
-  <label for="file_0">Select file</label>
-  <input type="file" id="file_0" name="file_0">
- </div>
- %= include '_paste_block_chrome' if browser->chrome() ;
- %= include '_paste_block_ff_ie' if browser->firefox() || browser->ie() ;
+ %= include '_add_file_form_part' ; 
  <button type="submit" class="btn btn-default">Add</button>
 % } else {
  %= tag p => (style=>"margin-top: 50px;") => include('_no_browser')

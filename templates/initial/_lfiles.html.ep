@@ -1,10 +1,15 @@
+% my $postfix = stash('postfix') || '';
+% my $_rw = stash('_rw') ? 1 : 0 ;
 % use Number::Bytes::Human qw(format_bytes);
-%= include 'initial/_files_header' ;
-% for my $key ( keys %{$files} ){
+%= include 'initial/_files_header', _rw => $_rw ;
+% for my $key (sort keys %{$files} ){
   <tr>
-    <td><%= link_to $key => "/$prefix/upload/download/$key" %></td>
+    <td><%= link_to $key => "/$prefix/upload/download/$key$postfix" %></td>
     <td><%= format_bytes($files->{$key}{size}) %></td>
     <td><%= $files->{$key}{mdate} %></td>
+    % if( $_rw ){
+     <td><%= check_box files => $key %></td>
+    % }
   </tr>
 % }
 %= include 'initial/_files_footer' ;
