@@ -218,7 +218,7 @@ sub deploy_db_object{
         my $object = $objects->{$dbobject_id};
         for my $key (keys %{$object}){
             if( $key !~ /password/ ){ 
-                $c->stash($key => $object->{$key});
+                $c->stash($key => $object->{$key}) ;
             }
         }
     } else {

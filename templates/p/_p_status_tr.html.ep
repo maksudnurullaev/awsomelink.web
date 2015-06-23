@@ -1,0 +1,5 @@
+<tr>
+ <td><u>Status</u></td>
+ % param( issue_status => stash('issue_status') ) if stash('issue_status') ;
+ <td><%= select_field issue_status => ['Opened','Closed'] %></td>
+</tr>

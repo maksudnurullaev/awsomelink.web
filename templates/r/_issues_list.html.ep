@@ -4,16 +4,22 @@
    <tr>
     <th>Description</th>
     <th>Attached files</th>
+    <th>Status</th>
    </tr>
   </thead>
   <tbody>
 % my $issue_order = scalar keys %{$issues} ;
 % for my $key (reverse sort keys %{$issues} ){
 % my $description = $issues->{$key}{description} ;
+% my $issue_status = $issues->{$key}{issue_status} || 'Opened' ;
+% my $issue_class = ( ($issue_status eq 'Closed') ? "label label-success" : "label label-danger" ) ;
   <tr>
    <td><%= $issue_order-- %>.
    <%= link_to $description => "/$prefix/r/issues_edit/$key" %></td>
    <td><span class="badge"><%= rfiles_count $key %></span></td>
+   <td>
+    %= tag span => ( class => $issue_class ) => $issue_status ;
+   </td>
   </tr>
 % }
  </tbody>

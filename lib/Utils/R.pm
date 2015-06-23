@@ -120,7 +120,7 @@ sub issue_edit {
         warn "Variables not define properly to add new issue!";
         return(undef);
     }
-    my $data = Utils::validate($c,['id','description']);
+    my $data = Utils::validate($c,['id','description','issue_status']);
     if( ! exists $data->{error} ){
         attach_properties $c, $data ;
         warn Dumper $data ;
