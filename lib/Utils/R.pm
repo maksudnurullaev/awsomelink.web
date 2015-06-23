@@ -114,6 +114,24 @@ sub issue_add {
     return(0)
 };
 
+sub issue_edit {
+    my ($c,$db,$dbobject_id) = @_;
+    if( !$c || !$db || !$db->is_valid ){
+        warn "Variables not define properly to add new issue!";
+        return(undef);
+    }
+    my $data = Utils::validate($c,['id','description']);
+    if( ! exists $data->{error} ){
+        attach_properties $c, $data ;
+        warn Dumper $data ;
+        $data->{owner} = $c->session('user id');
+        my $issue_id = $db->update($data);
+        post_files($c,$issue_id) if $issue_id;
+        return(1);
+    }
+    return(0)
+};
+
 # END OF PACKAGE
 };
 

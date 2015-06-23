@@ -4,8 +4,9 @@
 <h1>Edit issue</h1>
 %= include '_form_errors' ;
 % my $_rw = (stash('owner') && session('user id') && stash('owner') eq session('user id')) ;
-%= form_for "/$prefix/$controller/$action" => (enctype => 'multipart/form-data') => ( id => 'form_paste', method => 'post' ) => begin
+%= form_for "/$prefix/$controller/$action/$payload" => (enctype => 'multipart/form-data') => ( id => 'form_paste', method => 'post' ) => begin
  %= hidden_field object_name => 'issue' ;
+ %= hidden_field id => $payload ;
  % my $properties = stash 'properties' ;
  % if( $properties ){
   %= include 'p/_p_properties_list', properties => $properties if $properties ; 
@@ -25,7 +26,7 @@
 % my $files = rfiles $payload ;
 % if ( $files && scalar(keys %{$files}) ){
  <h2>Files</h2>
-%= form_for "/$prefix/$controller/issues_delete_files/$payload" => ( method => 'post' ) => begin
- %= include 'initial/_lfiles', files => $files, postfix => "?issue=$payload", _rw => $_rw ; 
-% end
+ %= form_for "/$prefix/$controller/issues_delete_files/$payload" => ( method => 'post' ) => begin
+  %= include 'initial/_lfiles', files => $files, postfix => "?issue=$payload", _rw => $_rw ; 
+ % end
 % }

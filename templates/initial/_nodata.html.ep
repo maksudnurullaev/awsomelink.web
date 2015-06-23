@@ -1,6 +1,6 @@
 <p>
 <div class="alert alert-info" role="alert">
-  <strong>No files!</strong> To demo use <%= link_to DEMO_LINK_ID => "/DEMO_LINK_ID" %>.
+  <strong>No files!</strong> You could try <%= link_to demo => "/DEMO_LINK_ID" %> or create <%= link_to 'new project' => '/my/p/add' %>.
 </div>
 </p>
 

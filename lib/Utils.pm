@@ -63,8 +63,7 @@ sub validate{
 
 sub validate_password2{
     my ($c,$password1,$password2) = @_ ;
-    if ( length($password1) < 4 
-            || $password1 ne $password2 ){
+    if ( !$password1 || !$password2 || length($password1) < 4 || $password1 ne $password2 ){
         $c->stash( "error_password" => 1 );
         return(0);
     }

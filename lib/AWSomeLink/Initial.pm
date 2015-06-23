@@ -16,8 +16,11 @@ sub start {
     } else {
         if( lc($c->req->method) eq 'post' ){
             my $db = Db->new($c,$prefix);
-            my $path = $db->is_valid ? "/$prefix/p/edit" : "/$prefix" ;
-            $c->redirect_to($path) ;
+            if( $db->is_valid ){
+                $c->redirect_to("/$prefix/p/edit");
+            } else {
+                $c->stash(error => "Invalid LinkID!");
+            }
         }
     }
 }

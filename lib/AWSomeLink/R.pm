@@ -61,8 +61,13 @@ sub issues_edit{
     my $prefix = Utils::trim $c->stash->{prefix} ;
     my $db = Db->new($c,$prefix) ;
     my $payload = Utils::trim $c->stash->{payload};
-    Utils::deploy_db_object($c,$db,$payload) if $payload;
-    Utils::deploy_db_objects($c,$db,'property','properties') ;
+    if( $payload ){
+        Utils::R::issue_edit($c,$db,$payload) if lc($c->req->method) eq 'post' ;
+        Utils::deploy_db_object($c,$db,$payload) ;
+        Utils::deploy_db_objects($c,$db,'property','properties') ;
+    } else {
+        $c->redirect_to("/$prefix/r/issues");
+    }
 };
 
 sub issues_add{
