@@ -52,6 +52,7 @@ sub issues{
     my $prefix = Utils::trim $c->stash->{prefix} ;
     my $db = Db->new($c,$prefix) ;
     Utils::deploy_db_objects($c,$db,'issue','issues') ;
+    Utils::deploy_db_objects($c,$db,'recipient','participants') ;
 };
 
 sub issues_edit{
@@ -80,8 +81,7 @@ sub issues_add{
     if( lc($c->req->method) eq 'post' ){
         if( Utils::R::issue_add($c,$db) ){
             $c->redirect_to("/$prefix/r/issues");
-        } else {
-        }
+        } 
     }
     
     Utils::deploy_db_objects($c,$db,'property','properties') ;

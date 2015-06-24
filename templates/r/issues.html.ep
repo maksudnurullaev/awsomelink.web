@@ -1,7 +1,8 @@
 % layout 'default';
 %= include 'r/_header' ;
 
-%= tag p => link_to( 'New issue' => "/$prefix/r/issues_add" => ( class=>"btn btn-default" ) ) ; 
+%= include 'r/_issues_toolbar' ;
+
 % my $issues = stash 'issues' ;
 % if ( $issues ){
  %= include 'r/_issues_list', issues => $issues ; 

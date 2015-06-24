@@ -236,6 +236,13 @@ sub deploy_db_objects{
     $c->stash( $names => $db->get_objects( { name => [$name] } ) ) ;
 };
 
+sub deploy_recipients{
+    my($c,$db) = @_;
+    if( !$c || !$db ){
+        warn "Variables not define properly to deploy users" ;
+    }
+};
+
 # END OF PACKAGE
 };
 

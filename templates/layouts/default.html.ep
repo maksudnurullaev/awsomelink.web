@@ -46,6 +46,7 @@
  %= tag p => (style=>"margin-top: 50px;") => include('_no_browser')
 % }
     <script src="https://awsome.link/holder.min.js"></script>
-    %#= tag pre => dumper(stash);
+    %= tag pre => dumper(stash('participants'));
+    %= tag pre => dumper(session);
   </body>
 </html>

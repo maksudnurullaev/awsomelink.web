@@ -123,7 +123,6 @@ sub issue_edit {
     my $data = Utils::validate($c,['id','description','issue_status']);
     if( ! exists $data->{error} ){
         attach_properties $c, $data ;
-        warn Dumper $data ;
         $data->{owner} = $c->session('user id');
         my $issue_id = $db->update($data);
         post_files($c,$issue_id) if $issue_id;

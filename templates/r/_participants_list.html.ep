@@ -13,11 +13,14 @@
 % my $password = $participants->{$key}{password};
 % my $cur_user = session('user name');
   <tr>
+   <td>
    % if( $email eq session('user email') ){
-    <td><%= $name %> <span class="badge">You</span></td>
+    %= $name 
+    <span class="badge">You</span>
    % } else {
-    <td><%= $name %></td>
+    %= $name ;
    % }
+    </td>
     <td><%= link_to $email => "mailto:$email?subject=Message from $cur_user&body=Hi $name," %></td>
   </tr>
 % }

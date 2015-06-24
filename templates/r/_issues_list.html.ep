@@ -5,6 +5,7 @@
     <th>Description</th>
     <th>Attached files</th>
     <th>Status</th>
+    <th>Created by</th>
    </tr>
   </thead>
   <tbody>
@@ -13,12 +14,22 @@
 % my $description = $issues->{$key}{description} ;
 % my $issue_status = $issues->{$key}{issue_status} || 'Opened' ;
 % my $issue_class = ( ($issue_status eq 'Closed') ? "label label-success" : "label label-danger" ) ;
+% my $issue_owner = $issues->{$key}{owner} ;
   <tr>
    <td><%= $issue_order-- %>.
    <%= link_to $description => "/$prefix/r/issues_edit/$key" %></td>
    <td><span class="badge"><%= rfiles_count $key %></span></td>
    <td>
     %= tag span => ( class => $issue_class ) => $issue_status ;
+   </td>
+   <td>
+    % my $name = $participants->{$issue_owner}{name} ;
+    % my $email = $participants->{$issue_owner}{email} ;
+    % my $cur_user = session('user name');
+    <%= link_to $email => "mailto:$email?subject=Message from $cur_user&body=Hi $name," %>
+    % if( $issue_owner eq session('user id') ) {
+     <span class="badge">You</span>
+    % }
    </td>
   </tr>
 % }
