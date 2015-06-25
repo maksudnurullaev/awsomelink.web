@@ -25,3 +25,6 @@
 % if( stash("invalid_file") ){
     <p class="text-center bg-danger">Invalid file!</p>
 % }
+% if( stash("error_rw") ){
+    <p class="text-center bg-danger">You not authorized to update!</p>
+% }

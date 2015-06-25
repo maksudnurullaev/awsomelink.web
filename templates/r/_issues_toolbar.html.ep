@@ -1,10 +1,12 @@
-<form class="form-inline">
+%= form_for "/$prefix/r/issues_filter" => ( class => "form-inline", method => 'POST' ) => begin
+ %= hidden_field return_path => "/$prefix/r/issues" ;
  <div class="btn-group">
   %= link_to( 'New issue' => "/$prefix/r/issues_add" => ( class=>"btn btn-primary" ) ) ; 
  </div>
  <div class="form-group">
-  <input type="text" class="form-control" placeholder="Filter">
+  % my $filter_value = session('issues filter') || '';
+  %= input_tag 'filter', ( type => 'text', class => 'form-control', placeholder => 'Filter', value => $filter_value ) ;
  </div>
  <button type="submit" class="btn btn-primary">Go</button>
-  %= link_to( 'Clear' => "/$prefix/r/nofilter" => ( class=>"btn btn-default" ) ) ; 
-</form>
+ %= link_to( 'Clear' => "/$prefix/r/issues_nofilter" => ( class=>"btn btn-default" ) ) ; 
+% end

@@ -131,6 +131,16 @@ sub issue_edit {
     return(0)
 };
 
+sub check_rw_access {
+    my ($db,$dbobject_id,$user_id) = @_;
+    if( !$db || !$db->is_valid || !$dbobject_id || !$user_id ){
+        warn "Variables not define properly to check user access!";
+        return(0);
+    }
+    my $where_part = { name => ['issue'], id => [$dbobject_id], field => ['owner'], value => [$user_id] } ;
+    return( $db->get_counts($where_part) );
+};
+
 # END OF PACKAGE
 };
 
