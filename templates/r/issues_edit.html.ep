@@ -20,9 +20,12 @@
   %= link_to 'Delete' => "/$prefix/r/issues_delete/$payload" => (class=>'btn btn-danger', role=>"button") ;
  % } else {
   %= link_to 'Back to issues' => "/$prefix/r/issues" => ( class=>"btn btn-default" ) ; 
+  |
+  %= link_to 'Confirm' => "/$prefix/r/issues_confirm/$payload?confirm=1" => ( class=>"btn btn-success" ) ; 
+  %= link_to 'Not confirm' => "/$prefix/r/issues_confirm/$payload?confirm=0" => ( class=>"btn btn-warning" ) ; 
  % }    
 % end
-
+%# ISSUE FILES
 % my $files = rfiles $payload ;
 % if ( $files && scalar(keys %{$files}) ){
  <h2>Files</h2>
@@ -30,3 +33,5 @@
   %= include 'initial/_lfiles', files => $files, postfix => "?issue=$payload", _rw => $_rw ; 
  % end
 % }
+%# ISSUE FILES
+%= include 'r/_confirmations' if stash('confirmations') ;

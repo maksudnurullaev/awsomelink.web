@@ -66,6 +66,23 @@ sub get_files_info{
     return(Utils::get_files_formated_info($path));
 };
 
+sub get_confirmations_total{
+    my($c,$confirmations) = @_ ;
+    my($_pos,$_neg) = (0,0);
+    my %h = split /[;,]/, $confirmations ;
+    for my $key (keys %h){
+        if( $h{$key} ){
+            $_pos++;
+        } else {
+            $_neg++;
+        }
+    }
+    my $result = '';
+    $result = '+' . $_pos if $_pos ;
+    $result =  $result . ($_pos?' / ':'') . '-' . $_neg if $_neg ;
+    return($result);
+};
+
 sub post_files{
     my($c,$issue_id) = @_;
     if( !$c || !$issue_id ){
@@ -140,6 +157,34 @@ sub check_rw_access {
     my $where_part = { name => ['issue'], id => [$dbobject_id], field => ['owner'], value => [$user_id] } ;
     return( $db->get_counts($where_part) );
 };
+
+sub issue_confirm{
+    my($c,$db,$dbobject_id,$confirm) = @_ ;
+    if( !$c || !$db || !$dbobject_id ){
+        warn "Variables not define properly to confirm issue!" ;
+        return(undef);
+    }
+    my $dbobjects = $db->get_objects({ id => [$dbobject_id] });
+    return if ! exists $dbobjects->{$dbobject_id} ; 
+    
+    my $o = $dbobjects->{$dbobject_id};
+    my $confirmations = exists($o->{confirmations}) ?
+        $o->{confirmations}  : '' ;
+    $confirm = $confirm ? 1 : 0 ;
+    my $user_id = $c->session('user id');
+    if( $confirmations ){
+        my %h = split /[;,]/, $confirmations ;
+        $h{$user_id} = $confirm  ;
+        $confirmations = join(";", map { "$_,$h{$_}" } keys %h);
+    } else {
+        $confirmations = "$user_id,$confirm";
+    }
+    my $data = { object_name => $o->{object_name} ,
+                 id => $o->{id} ,
+                 confirmations => $confirmations };
+    $db->update($data) ;             
+};
+
 
 # END OF PACKAGE
 };

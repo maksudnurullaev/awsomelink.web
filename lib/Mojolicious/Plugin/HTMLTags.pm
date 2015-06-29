@@ -29,6 +29,7 @@ sub register {
     my ($self,$app) = @_;
     $app->helper( rfiles_count => sub { Utils::R::get_files_count (@_); } );
     $app->helper( rfiles       => sub { Utils::R::get_files_info (@_); } );
+    $app->helper( confirmations_total => sub { Utils::R::get_confirmations_total (@_); } );
     $app->helper( shrink_if    => sub { Utils::shrink_if (@_) ; } );
 };
 

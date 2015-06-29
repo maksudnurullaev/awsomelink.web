@@ -1,7 +1,7 @@
 % my @cls_postfix = qw(default primary info success) ;
 % my $order = 0 ;
 % for my $key (sort keys %{$issue}){
- % if ( $key !~ /(id|description|issue_status|object_name|owner)/ ){
+ % if ( $key !~ /(id|description|issue_status|object_name|owner|confirmations)/ ){
   %= tag span => ( class => ("label label-" . $cls_postfix[(($order++)%4)]) ) => begin
    %= "$key:" ;
    %= tag u => $issue->{$key} ;

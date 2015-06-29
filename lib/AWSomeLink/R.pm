@@ -103,6 +103,7 @@ sub issues_edit{
         }
         Utils::deploy_db_object($c,$db,$payload) ;
         Utils::deploy_db_objects($c,$db,'property','properties') ;
+        Utils::deploy_db_objects($c,$db,'recipient','participants') ;
     } else {
         $c->redirect_to("/$prefix/r/issues");
     }
@@ -160,6 +161,20 @@ sub issues_delete {
     }
 
     $c->redirect_to("/$prefix/r/issues");
+};
+
+sub issues_confirm{
+    my $c = shift ;
+    return if !  _check_access($c);
+
+    my $prefix = Utils::trim $c->stash->{prefix} ;
+    my $db = Db->new($c,$prefix) ;
+    my $payload = Utils::trim $c->stash->{payload};
+    my $confirm = $c->param('confirm');
+
+    Utils::R::issue_confirm($c,$db,$payload,$confirm);
+
+    $c->redirect_to("/$prefix/r/issues_edit/$payload");
 };
 
 1;

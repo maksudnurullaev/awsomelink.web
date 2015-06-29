@@ -17,6 +17,7 @@
 % my $issue_owner = $issues->{$key}{owner} ;
   <tr>
    <td><%= $issue_order-- %>.
+    %= tag span => ( class => 'badge' ) => confirmations_total($issues->{$key}{confirmations}) if exists $issues->{$key}{confirmations} ; 
     %= link_to shrink_if($description,50) => "/$prefix/r/issues_edit/$key" ;
     <br />
     %= include 'r/_properties_as_labels', issue => $issues->{$key} ;
@@ -29,10 +30,8 @@
     % my $name = $participants->{$issue_owner}{name} ;
     % my $email = $participants->{$issue_owner}{email} ;
     % my $cur_user = session('user name');
+    <span class="badge"><%= $issue_owner eq session('user id')?'You':$name %></span>
     <%= link_to $email => "mailto:$email?subject=Message from $cur_user&body=Hi $name," %>
-    % if( $issue_owner eq session('user id') ) {
-     <span class="badge">You</span>
-    % }
    </td>
   </tr>
 % }

@@ -54,7 +54,7 @@ sub export{
     $worksheet->write($ord_row,$ord_col++,'E-MAIL');
     # ... other headers
     for my $header ( sort keys %{$issues->{$issue_ids[0]}} ){
-         if ( $header !~ /(id|description|issue_status|object_name|owner)/ ){
+         if ( $header !~ /(id|description|issue_status|object_name|owner|confirmations)/ ){
             $worksheet->write($ord_row,$ord_col++,uc($header));
          }
     }
@@ -70,7 +70,7 @@ sub export{
         $worksheet->write($ord_row,$ord_col++,$owner->{name});
         $worksheet->write($ord_row,$ord_col++,$owner->{email});
         for my $property (sort keys %{$o}){
-            if ( $property !~ /(id|description|issue_status|object_name|owner)/ ){
+            if ( $property !~ /(id|description|issue_status|object_name|owner|confirmations)/ ){
                 $worksheet->write($ord_row,$ord_col++,$o->{$property});
             }
         }

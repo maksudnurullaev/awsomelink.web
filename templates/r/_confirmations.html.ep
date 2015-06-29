@@ -1,0 +1,29 @@
+% my %h = split /[;,]/, $confirmations ;
+% if( %h ){
+ %= tag h2 => 'Confirmations' ;
+ <div class="row">
+  <table class="table table-striped">
+   <thead>
+    <tr>
+     <th>User</th>
+     <th>Confirmed?</th>
+    </tr>
+   </thead>
+   <tbody>
+   % for my $key (sort keys %h) {
+    <tr>
+     % my $cls = $h{$key} ? 'success' : 'warning' ;
+     %= tag td => begin
+      % my $name = $participants->{$key}{name} ;
+      % my $email = $participants->{$key}{email} ;
+      % my $cur_user = session('user name');
+      <span class="badge"><%= $key eq session('user id')?'You':$name %></span>
+      <%= link_to $email => "mailto:$email?subject=Message from $cur_user&body=Hi $name," %>
+     % end
+     %= tag td => ( class => "$cls text-center") => ($h{$key}?'Yes':'No') ;
+    </tr>
+   % }
+   </tbody>
+  </table>
+ </div>
+% }
