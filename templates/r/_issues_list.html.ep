@@ -17,7 +17,10 @@
 % my $issue_owner = $issues->{$key}{owner} ;
   <tr>
    <td><%= $issue_order-- %>.
-   <%= link_to $description => "/$prefix/r/issues_edit/$key" %></td>
+    %= link_to shrink_if($description,50) => "/$prefix/r/issues_edit/$key" ;
+    <br />
+    %= include 'r/_properties_as_labels', issue => $issues->{$key} ;
+   </td>
    <td><span class="badge"><%= rfiles_count $key %></span></td>
    <td>
     %= tag span => ( class => $issue_class ) => $issue_status ;

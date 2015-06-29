@@ -5,6 +5,7 @@ use Utils::User;
 use Utils::P;
 use Utils::R;
 use Db;
+use Utils::Excel;
 use Data::Dumper;
 
 sub _check_access{
@@ -55,6 +56,19 @@ sub issues{
     Utils::deploy_db_objects($c,$db,'recipient','participants') ;
 };
 
+sub export{
+    my $c = shift ;
+    return if ! _check_access($c);
+
+    my ($file_path,$file_name) = Utils::Excel::export($c);
+    if ($file_path && $file_name){
+        $c->render_file( filepath => $file_path, filename => $file_name );
+    } else {
+        my $prefix = Utils::trim $c->stash->{prefix} ;
+        $c->redirect_to("/$prefix/r/issues");
+    }
+};
+
 sub issues_nofilter{
     my $c = shift ;
     return if ! _check_access($c);
@@ -74,7 +88,7 @@ sub issues_filter{
 
 sub issues_edit{
     my $c = shift ;
-    return if !  _check_access($c);
+    #return if !  _check_access($c);
 
     my $prefix = Utils::trim $c->stash->{prefix} ;
     my $db = Db->new($c,$prefix) ;

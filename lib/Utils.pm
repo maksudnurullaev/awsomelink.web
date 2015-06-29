@@ -233,8 +233,13 @@ sub deploy_db_objects{
         warn "Variables not define properly deploy project related onbjects!";
         return(undef);
     }
+    return($c->stash( $names => get_db_objects_filtered($db,$name,$filter) ) );
+};
+
+sub get_db_objects_filtered{
+    my ($db,$name,$filter) = @_ ;
     if( !$filter ){
-        $c->stash( $names => $db->get_objects( { name => [$name] } ) ) ;
+        return( $db->get_objects( { name => [$name] } ) ) ;
     } else {
         my $sql = "SELECT * FROM objects WHERE id IN ( " . 
                   " SELECT DISTINCT id FROM objects WHERE id IN ( " .
@@ -242,8 +247,9 @@ sub deploy_db_objects{
                   "   SELECT id FROM objects WHERE name = 'recipient' AND field IN ('name','email') AND id IN ( " . 
                   "    SELECT DISTINCT value FROM objects WHERE name = 'issue' AND field = 'owner' ) AND value LIKE '%$filter%' escape '\\') ) ) " ;
         my $sth = $db->get_from_sql($sql);
-        $c->stash( $names => $db->format_statement2hash_objects($sth) );
+        return( $db->format_statement2hash_objects($sth) );
     }
+    
 };
 
 sub deploy_recipients{

@@ -1,7 +1,11 @@
 <p>
 Welcome! You registered as 
-%= tag strong => session('user name') ;
-%= tag sup => session('user email') ;
+% if( session('user name') ){
+ %= tag strong => session('user name') ;
+ %= tag sup => session('user email') ;
+% } else {
+ %= tag sup => "Guest" ;
+% }
 </p>
 %= include 'r/_header_menu' ;
 
