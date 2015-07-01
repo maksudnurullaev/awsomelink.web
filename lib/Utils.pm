@@ -22,6 +22,7 @@ use Data::UUID;
 use File::Spec;
 use File::Path qw(make_path);
 use Locale::Currency::Format;
+use Encode qw( encode decode_utf8 );
 use Data::Dumper;
 
 sub trim{
@@ -109,7 +110,7 @@ sub get_files_formated_info{
         next if -d $file ;
         my($filename, $dirs, $suffix) = fileparse($file);
         my $st = stat($file);
-        $result->{$filename} = { size => $st->[7], mdate => strftime('%Y-%m-%d %H:%M:%S', localtime( $st->[9])) } ;
+        $result->{$filename} = { name => utf8::decode($filename), size => $st->[7], mdate => strftime('%Y-%m-%d %H:%M:%S', localtime( $st->[9])) } ;
     }
     return( $result );
 };

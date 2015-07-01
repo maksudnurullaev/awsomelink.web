@@ -22,6 +22,7 @@
   %= link_to 'Back to issues' => "/$prefix/r/issues" => ( class=>"btn btn-default" ) ; 
   |
   %= link_to 'Confirm' => "/$prefix/r/issues_confirm/$payload?confirm=1" => ( class=>"btn btn-success" ) ; 
+  |
   %= link_to 'Not confirm' => "/$prefix/r/issues_confirm/$payload?confirm=0" => ( class=>"btn btn-warning" ) ; 
  % }    
 % end
@@ -34,4 +35,4 @@
  % end
 % }
 %# ISSUE FILES
-%= include 'r/_confirmations' if stash('confirmations') ;
+%= include 'r/_confirmations' ;

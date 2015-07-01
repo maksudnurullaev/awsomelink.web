@@ -63,7 +63,9 @@ sub get_files_info{
     }
     my $path = get_files_path($c,$issue_id);
     return(undef) if ! -d $path ;
-    return(Utils::get_files_formated_info($path));
+    my $result = Utils::get_files_formated_info($path);
+    $c->stash( _result => $result );
+    return($result);
 };
 
 sub get_confirmations_total{
@@ -79,7 +81,7 @@ sub get_confirmations_total{
     }
     my $result = '';
     $result = '+' . $_pos if $_pos ;
-    $result =  $result . ($_pos?' / ':'') . '-' . $_neg if $_neg ;
+    $result =  $result . ($_pos?' | ':'') . '-' . $_neg if $_neg ;
     return($result);
 };
 

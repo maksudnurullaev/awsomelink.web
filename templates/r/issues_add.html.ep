@@ -10,14 +10,10 @@
   %= include 'p/_p_properties_list', properties => $properties if $properties ; 
  % }
  %= include '_form_group_textarea', f_name => 'Description' ;
-% if( ! browser->mobile() ){
  <hr />
  %= include '_add_file_form_part' ; 
- <button type="submit" class="btn btn-primary">Add</button>
- %= link_to 'Cancel' => "/$prefix/r/issues" => ( class=>"btn btn-default" ) ; 
-% } else {
- %= tag p => (style=>"margin-top: 50px;") => include('_no_browser')
-% }
+<button type="submit" class="btn btn-primary">Add</button>
+%= link_to 'Cancel' => "/$prefix/r/issues" => ( class=>"btn btn-default" ) ; 
 
 % end
 

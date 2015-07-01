@@ -1,5 +1,4 @@
-% my %h = split /[;,]/, $confirmations ;
-% if( %h ){
+% if( stash('confirmations') ){
  %= tag h2 => 'Confirmations' ;
  <div class="row">
   <table class="table table-striped">
@@ -10,19 +9,29 @@
     </tr>
    </thead>
    <tbody>
-   % for my $key (sort keys %h) {
-    <tr>
-     % my $cls = $h{$key} ? 'success' : 'warning' ;
-     %= tag td => begin
-      % my $name = $participants->{$key}{name} ;
-      % my $email = $participants->{$key}{email} ;
-      % my $cur_user = session('user name');
-      <span class="badge"><%= $key eq session('user id')?'You':$name %></span>
-      <%= link_to $email => "mailto:$email?subject=Message from $cur_user&body=Hi $name," %>
-     % end
-     %= tag td => ( class => "$cls text-center") => ($h{$key}?'Yes':'No') ;
-    </tr>
-   % }
+   % my $cur_user = session('user name');
+   % my $owner_name = $participants->{$owner}{name} ;
+   % my $owner_email = $participants->{$owner}{email} ;
+   <tr>
+    <td>
+     <span class="badge"><%= $owner_name %></span>
+     %= link_to $owner_email => "mailto:$owner_email?subject=Message from $cur_user&body=Hi $owner_name," ;
+    </td>
+    <td class="text-center"><span class="label label-primary">Owner</span></td>
+   </tr> 
+    % my %h = split /[;,]/, stash('confirmations') ;
+    % for my $key (sort keys %h) {
+     <tr>
+      % my $cls = $h{$key} ? 'success' : 'warning' ;
+      %= tag td => begin
+       % my $name = $participants->{$key}{name} ;
+       % my $email = $participants->{$key}{email} ;
+       <span class="badge"><%= $key eq session('user id')?'You':$name %></span>
+       <%= link_to $email => "mailto:$email?subject=Message from $cur_user&body=Hi $name," %>
+      % end
+      %= tag td => ( class => "$cls text-center") => ($h{$key}?'Yes':'No') ;
+     </tr>
+    % }
    </tbody>
   </table>
  </div>

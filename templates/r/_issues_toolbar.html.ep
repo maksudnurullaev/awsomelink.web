@@ -1,15 +1,33 @@
-%= form_for "/$prefix/r/issues_filter" => ( class => "form-inline", method => 'POST' ) => begin
- %= hidden_field return_path => "/$prefix/r/issues" ;
- <div class="btn-group">
-  %= link_to( 'New issue' => "/$prefix/r/issues_add" => ( class=>"btn btn-success" ) ) ; 
- </div>
- |
+% if( !browser->mobile() ){
+ %= form_for "/$prefix/r/issues_filter" => ( class => "form-inline", method => 'POST' ) => begin
+  %= hidden_field return_path => "/$prefix/r/issues" ;
+  <div class="btn-group">
+   %= link_to( 'New issue' => "/$prefix/r/issues_add" => ( class=>"btn btn-success" ) ) ; 
+  </div>
+  |
+  <div class="form-group">
+   % my $filter_value = session('issues filter') || '';
+   %= input_tag 'filter', ( type => 'text', class => 'form-control', placeholder => 'Filter', value => $filter_value ) ;
+  </div>
+  <button type="submit" class="btn btn-primary">Apply</button>
+  %= link_to( 'Clear' => "/$prefix/r/issues_nofilter" => ( class=>"btn btn-default" ) ) ; 
+  |
+  %= link_to( 'Export' => "/$prefix/r/export" => ( class=>"btn btn-info" ) ) ; 
+ % end
+% } else {
  <div class="form-group">
-  % my $filter_value = session('issues filter') || '';
-  %= input_tag 'filter', ( type => 'text', class => 'form-control', placeholder => 'Filter', value => $filter_value ) ;
+  %= link_to( 'New issue' => "/$prefix/r/issues_add" => ( class=>"btn btn-success" ) ) ; 
+  %= link_to( 'Export' => "/$prefix/r/export" => ( class=>"btn btn-info" ) ) ; 
  </div>
- <button type="submit" class="btn btn-primary">Go</button>
- %= link_to( 'Clear' => "/$prefix/r/issues_nofilter" => ( class=>"btn btn-default" ) ) ; 
- |
- %= link_to( 'Export' => "/$prefix/r/export" => ( class=>"btn btn-info" ) ) ; 
-% end
+ %= form_for "/$prefix/r/issues_filter" => ( class => "form-inline", method => 'POST' ) => begin
+  %= hidden_field return_path => "/$prefix/r/issues" ;
+  <div class="form-group">
+   % my $filter_value = session('issues filter') || '';
+   %= input_tag 'filter', ( type => 'text', class => 'form-control', placeholder => 'Filter', value => $filter_value ) ;
+  </div>
+  <div class="form-group">
+   <button type="submit" class="btn btn-primary">Apply</button>
+   %= link_to( 'Clear' => "/$prefix/r/issues_nofilter" => ( class=>"btn btn-default" ) ) ; 
+  </div>
+ % end
+% }

@@ -9,7 +9,7 @@
    </tr>
   </thead>
   <tbody>
-  %= include 'p/_p_status_tr' ;
+  %= include 'p/_p_status_tr' if $controller eq 'r' ;
 % for my $key (sort keys %{$properties} ){
 % param( $properties->{$key}{name} => stash( $properties->{$key}{name} ) ) ;
 % my $name = $properties->{$key}{name} ;

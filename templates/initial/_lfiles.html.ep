@@ -4,7 +4,7 @@
 %= include 'initial/_files_header', _rw => $_rw ;
 % for my $key (sort keys %{$files} ){
   <tr>
-    <td><%= link_to $key => "/$prefix/upload/download/$key$postfix" %></td>
+    <td><%= link_to "$key" => "/$prefix/upload/download/$key$postfix" %></td>
     <td><%= format_bytes($files->{$key}{size}) %></td>
     <td><%= $files->{$key}{mdate} %></td>
     % if( $_rw ){
